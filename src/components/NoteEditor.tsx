@@ -1,15 +1,13 @@
 import React, { useReducer, useRef } from 'react';
 import { EditorState, Editor, RichUtils } from 'draft-js';
+import { NoteAction } from '../interfaces';
+import Toolbar from './Toolbar';
 
 // this is temporary
 interface INote {
   title: string;
   note: EditorState;
 }
-
-type NoteAction =
-  | { type: 'updateNote'; payload: EditorState }
-  | { type: 'updateTitle'; payload: string };
 
 const reducer = (state: INote, action: NoteAction) => {
   switch (action.type) {
@@ -53,9 +51,9 @@ const NoteEditor: React.FC = () => {
 
   return (
     <>
-      {/* toolbar is here */}
+      <Toolbar state={state} dispatch={dispatch} />
       <div className='h-screen' onClick={() => editor.current?.focus()}>
-        <Editor
+        <Editor // needs styling
           ref={editor}
           editorState={state.note}
           onChange={setNote}
