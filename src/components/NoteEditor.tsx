@@ -1,7 +1,8 @@
 import React, { useReducer, useRef } from 'react';
-import { EditorState, Editor, RichUtils } from 'draft-js';
+import { EditorState, Editor, RichUtils, DraftStyleMap } from 'draft-js';
 import { NoteAction } from '../interfaces';
 import Toolbar from './Toolbar';
+import '../NoteEditor.css';
 
 // this is temporary
 interface INote {
@@ -26,6 +27,11 @@ const reducer = (state: INote, action: NoteAction) => {
     default:
       return state;
   }
+};
+
+const styleMap: DraftStyleMap = {
+  STRIKETHROUGH: { textDecoration: 'line-through' },
+  HIGHLIGHT: { backgroundColor: '#FFFF00' },
 };
 
 const NoteEditor: React.FC = () => {
@@ -54,6 +60,7 @@ const NoteEditor: React.FC = () => {
       <Toolbar state={state} dispatch={dispatch} />
       <div className='h-screen' onClick={() => editor.current?.focus()}>
         <Editor // needs styling
+          customStyleMap={styleMap}
           ref={editor}
           editorState={state.note}
           onChange={setNote}

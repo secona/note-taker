@@ -1,0 +1,10 @@
+div.DraftEditor-root {
+  position: relative;
+  top: 7rem;
+  padding: 0 0.75rem;
+}
+
+div.DraftEditor-editorContainer,
+div.public-DraftEditor-content {
+  height: 100%;
+}
