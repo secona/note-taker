@@ -1,33 +1,8 @@
 import React, { useReducer, useRef } from 'react';
 import { EditorState, Editor, RichUtils, DraftStyleMap } from 'draft-js';
-import { NoteAction } from '../interfaces';
+import { NoteReducer } from '../NoteReducer';
 import Toolbar from './Toolbar';
 import '../NoteEditor.css';
-
-// this is temporary
-interface INote {
-  title: string;
-  note: EditorState;
-}
-
-const reducer = (state: INote, action: NoteAction) => {
-  switch (action.type) {
-    case 'updateTitle':
-      return {
-        ...state,
-        title: action.payload,
-      };
-
-    case 'updateNote':
-      return {
-        ...state,
-        note: action.payload,
-      };
-
-    default:
-      return state;
-  }
-};
 
 const styleMap: DraftStyleMap = {
   STRIKETHROUGH: { textDecoration: 'line-through' },
@@ -35,7 +10,7 @@ const styleMap: DraftStyleMap = {
 };
 
 const NoteEditor: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(NoteReducer, {
     title: 'My Note',
     note: EditorState.createEmpty(),
   });

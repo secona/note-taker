@@ -1,20 +1,14 @@
 import React from 'react';
-import { EditorState, RichUtils } from 'draft-js';
+import { RichUtils } from 'draft-js';
 import TextInput from './TextInput';
 import EditorButton from './EditorButton';
-import { NoteAction } from '../interfaces';
+import { NoteAction, INote } from '../NoteReducer';
 
 import { ReactComponent as Bold } from '../icons/bold.svg';
 import { ReactComponent as Italic } from '../icons/italic.svg';
 import { ReactComponent as Underline } from '../icons/underline.svg';
 import { ReactComponent as Strikethrough } from '../icons/strikethrough.svg';
 import { ReactComponent as ColorFill } from '../icons/colorFill.svg';
-
-// this is temporary
-interface INote {
-  title: string;
-  note: EditorState;
-}
 
 interface Props {
   dispatch: React.Dispatch<NoteAction>;
