@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Note from './Note';
-import { INote } from '../NoteReducer';
+import { NoteContext } from '../NoteContext';
 
-interface Props {
-  notes: INote[];
-}
+const NoteGrid: React.FC = () => {
+  const { state } = useContext(NoteContext)!;
 
-const NoteGrid: React.FC<Props> = props => {
   return (
     <div className='flex flex-wrap justify-center'>
-      {props.notes.map((note, idx) => (
-        <Note note={note} key={idx} />
+      {state.notes.map((_, idx) => (
+        <Note idx={idx} />
       ))}
     </div>
   );
