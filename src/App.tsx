@@ -1,5 +1,6 @@
 import { EditorState } from 'draft-js';
 import React, { useReducer } from 'react';
+import Header from './components/Header';
 import NoteEditor from './components/NoteEditor';
 import NoteGrid from './components/NoteGrid';
 import { NoteContext } from './NoteContext';
@@ -20,7 +21,14 @@ const App: React.FC = () => {
   const [state, dispatch] = useReducer(NoteReducer, initialState);
   return (
     <NoteContext.Provider value={{ state, dispatch }}>
-      {state.selectedNote === '' ? <NoteGrid /> : <NoteEditor />}
+      {state.selectedNote === '' ? (
+        <>
+          <Header />
+          <NoteGrid />
+        </>
+      ) : (
+        <NoteEditor />
+      )}
     </NoteContext.Provider>
   );
 };
