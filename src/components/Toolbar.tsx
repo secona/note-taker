@@ -15,7 +15,7 @@ const Toolbar: React.FC = () => {
 
   const toggleInlineStyle = (inlineStyle: string) => {
     const newNote = RichUtils.toggleInlineStyle(
-      state.notes[state.selectedNote!].note,
+      state.notes[state.selectedNote].note,
       inlineStyle
     );
     dispatch({ type: 'updateCurrentNote', payload: newNote });
@@ -30,7 +30,7 @@ const Toolbar: React.FC = () => {
         </button>
         <TextInput
           className='w-full'
-          value={state.notes[state.selectedNote!].title}
+          value={state.notes[state.selectedNote].title}
           onChange={e =>
             dispatch({ type: 'updateCurrentTitle', payload: e.target.value })
           }

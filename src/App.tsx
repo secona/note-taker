@@ -6,15 +6,21 @@ import { NoteContext } from './NoteContext';
 import { INotes, NoteReducer } from './NoteReducer';
 
 const initialState: INotes = {
-  selectedNote: null,
-  notes: [{ title: 'My Note', note: EditorState.createEmpty() }],
+  selectedNote: '',
+  notes: {
+    RXhJkIxXHiaYzK1: { title: 'My Note', note: EditorState.createEmpty() },
+    Ujs9Om7GUh2bW3k: {
+      title: 'My Other Note',
+      note: EditorState.createEmpty(),
+    },
+  },
 };
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(NoteReducer, initialState);
   return (
     <NoteContext.Provider value={{ state, dispatch }}>
-      {state.selectedNote === null ? <NoteGrid /> : <NoteEditor />}
+      {state.selectedNote === '' ? <NoteGrid /> : <NoteEditor />}
     </NoteContext.Provider>
   );
 };

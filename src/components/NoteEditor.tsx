@@ -19,7 +19,7 @@ const NoteEditor: React.FC = () => {
 
   const handleKeyCommand = (command: string) => {
     const newNote = RichUtils.handleKeyCommand(
-      state.notes[state.selectedNote!].note,
+      state.notes[state.selectedNote].note,
       command
     );
     if (newNote) {
@@ -36,7 +36,7 @@ const NoteEditor: React.FC = () => {
         <Editor
           customStyleMap={styleMap}
           ref={editor}
-          editorState={state.notes[state.selectedNote!].note}
+          editorState={state.notes[state.selectedNote].note}
           onChange={setNote}
           handleKeyCommand={handleKeyCommand}
         />

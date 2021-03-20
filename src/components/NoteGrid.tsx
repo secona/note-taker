@@ -7,8 +7,8 @@ const NoteGrid: React.FC = () => {
 
   return (
     <div className='flex flex-wrap justify-center'>
-      {state.notes.map((_, idx) => (
-        <Note idx={idx} />
+      {Object.keys(state.notes).map((key: string) => (
+        <Note id={key} />
       ))}
     </div>
   );
