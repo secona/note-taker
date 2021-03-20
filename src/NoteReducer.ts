@@ -5,41 +5,22 @@ export interface INote {
   note: EditorState;
 }
 
-export interface INotes {
-  selectedNote: string;
-  notes: { [id: string]: INote };
-}
-
 export type NoteAction =
-  | { type: 'updateCurrentNote'; payload: EditorState }
-  | { type: 'updateCurrentTitle'; payload: string }
-  | { type: 'selectNote'; payload: string }
-  | { type: 'closeNote' };
+  | { type: 'updateNote'; payload: EditorState }
+  | { type: 'updateTitle'; payload: string };
 
-export const NoteReducer = (state: INotes, action: NoteAction) => {
+export const NoteReducer = (state: INote, action: NoteAction) => {
   switch (action.type) {
-    case 'updateCurrentTitle': {
-      const newState = { ...state };
-      newState.notes[state.selectedNote].title = action.payload;
-      return newState;
-    }
-
-    case 'updateCurrentNote': {
-      const newState = { ...state };
-      newState.notes[state.selectedNote].note = action.payload;
-      return newState;
-    }
-
-    case 'selectNote':
+    case 'updateTitle':
       return {
         ...state,
-        selectedNote: action.payload,
+        title: action.payload,
       };
 
-    case 'closeNote':
+    case 'updateNote':
       return {
         ...state,
-        selectedNote: '',
+        note: action.payload,
       };
 
     default:

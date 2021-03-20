@@ -1,8 +1,8 @@
-import React, { useRef, useContext } from 'react';
-import { Editor, RichUtils, DraftStyleMap, EditorState } from 'draft-js';
+import React, { useReducer, useRef } from 'react';
+import { EditorState, Editor, RichUtils, DraftStyleMap } from 'draft-js';
+import { NoteReducer } from '../NoteReducer';
 import Toolbar from './Toolbar';
 import '../NoteEditor.css';
-import { NoteContext } from '../NoteContext';
 
 const styleMap: DraftStyleMap = {
   STRIKETHROUGH: { textDecoration: 'line-through' },
@@ -10,18 +10,17 @@ const styleMap: DraftStyleMap = {
 };
 
 const NoteEditor: React.FC = () => {
-  const editor = useRef<Editor>(null);
-  const { state, dispatch } = useContext(NoteContext)!;
+  const [state, dispatch] = useReducer(NoteReducer, {
+    title: 'My Note',
+    note: EditorState.createEmpty(),
+  });
 
   const setNote = (newNote: EditorState) => {
-    dispatch({ type: 'updateCurrentNote', payload: newNote });
+    dispatch({ type: 'updateNote', payload: newNote });
   };
 
   const handleKeyCommand = (command: string) => {
-    const newNote = RichUtils.handleKeyCommand(
-      state.notes[state.selectedNote].note,
-      command
-    );
+    const newNote = RichUtils.handleKeyCommand(state.note, command);
     if (newNote) {
       setNote(newNote);
       return 'handled';
@@ -29,14 +28,16 @@ const NoteEditor: React.FC = () => {
     return 'not-handled';
   };
 
+  const editor = useRef<Editor>(null);
+
   return (
     <>
-      <Toolbar />
+      <Toolbar state={state} dispatch={dispatch} />
       <div className='h-screen' onClick={() => editor.current?.focus()}>
-        <Editor
+        <Editor // needs styling
           customStyleMap={styleMap}
           ref={editor}
-          editorState={state.notes[state.selectedNote].note}
+          editorState={state.note}
           onChange={setNote}
           handleKeyCommand={handleKeyCommand}
         />
