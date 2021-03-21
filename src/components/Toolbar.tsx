@@ -9,6 +9,7 @@ import { ReactComponent as Italic } from '../icons/italic.svg';
 import { ReactComponent as Underline } from '../icons/underline.svg';
 import { ReactComponent as Strikethrough } from '../icons/strikethrough.svg';
 import { ReactComponent as ColorFill } from '../icons/colorFill.svg';
+import { Link } from 'react-router-dom';
 
 interface Props {
   dispatch: React.Dispatch<NoteAction>;
@@ -23,6 +24,12 @@ const Toolbar: React.FC<Props> = ({ state, dispatch }) => {
 
   return (
     <div className='fixed top-0 w-full flex flex-col p-3 bg-white rounded-b-md space-y-2 shadow-md'>
+      <Link to='/'>
+        <button>
+          {/* temproary */}
+          Back
+        </button>
+      </Link>
       <TextInput
         className='w-full'
         value={state.title}

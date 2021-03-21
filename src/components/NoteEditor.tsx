@@ -1,6 +1,8 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import { EditorState, Editor, RichUtils, DraftStyleMap } from 'draft-js';
-import { NoteReducer } from '../NoteReducer';
+import { useParams } from 'react-router';
+import { getDataById } from '../lib/db';
+import { NoteReducer, EmptyInitialValue } from '../NoteReducer';
 import Toolbar from './Toolbar';
 import '../NoteEditor.css';
 
@@ -10,10 +12,19 @@ const styleMap: DraftStyleMap = {
 };
 
 const NoteEditor: React.FC = () => {
-  const [state, dispatch] = useReducer(NoteReducer, {
-    title: 'My Note',
-    note: EditorState.createEmpty(),
-  });
+  const editor = useRef<Editor>(null);
+  const [state, dispatch] = useReducer(NoteReducer, EmptyInitialValue);
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    const result = getDataById(id);
+    if (result) dispatch({ type: 'updateAll', payload: result });
+  }, []);
+
+  if (state.id === '') {
+    // TODO: 404 component
+    return <p>404 note not found</p>;
+  }
 
   const setNote = (newNote: EditorState) => {
     dispatch({ type: 'updateNote', payload: newNote });
@@ -28,13 +39,11 @@ const NoteEditor: React.FC = () => {
     return 'not-handled';
   };
 
-  const editor = useRef<Editor>(null);
-
   return (
     <>
       <Toolbar state={state} dispatch={dispatch} />
       <div className='h-screen' onClick={() => editor.current?.focus()}>
-        <Editor // needs styling
+        <Editor
           customStyleMap={styleMap}
           ref={editor}
           editorState={state.note}

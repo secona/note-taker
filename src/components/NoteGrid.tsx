@@ -1,19 +1,7 @@
 import React from 'react';
-import Note from './Note';
-import { INote } from '../NoteReducer';
 
-interface Props {
-  notes: INote[];
-}
-
-const NoteGrid: React.FC<Props> = props => {
-  return (
-    <div className='flex flex-wrap justify-center'>
-      {props.notes.map((note, idx) => (
-        <Note note={note} key={idx} />
-      ))}
-    </div>
-  );
+const NoteGrid: React.FC = props => {
+  return <div className='flex flex-wrap justify-center'>{props.children}</div>;
 };
 
 export default NoteGrid;
