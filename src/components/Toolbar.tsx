@@ -1,15 +1,9 @@
 import React from 'react';
 import { RichUtils } from 'draft-js';
-import TextInput from './TextInput';
-import EditorButton from './EditorButton';
-import { NoteAction, INote } from '../NoteReducer';
-
-import { ReactComponent as Bold } from '../icons/bold.svg';
-import { ReactComponent as Italic } from '../icons/italic.svg';
-import { ReactComponent as Underline } from '../icons/underline.svg';
-import { ReactComponent as Strikethrough } from '../icons/strikethrough.svg';
-import { ReactComponent as ColorFill } from '../icons/colorFill.svg';
 import { Link } from 'react-router-dom';
+import TextInput from './TextInput';
+import InlineStyleButtons from './InlineStyleButtons';
+import { NoteAction, INote } from '../NoteReducer';
 
 interface Props {
   dispatch: React.Dispatch<NoteAction>;
@@ -38,26 +32,7 @@ const Toolbar: React.FC<Props> = ({ state, dispatch }) => {
         }
       />
       <div className='flex flex-row flex-wrap space-x-1'>
-        <EditorButton
-          onClick={() => toggleInlineStyle('BOLD')}
-          children={<Bold />}
-        />
-        <EditorButton
-          onClick={() => toggleInlineStyle('ITALIC')}
-          children={<Italic />}
-        />
-        <EditorButton
-          onClick={() => toggleInlineStyle('UNDERLINE')}
-          children={<Underline />}
-        />
-        <EditorButton
-          onClick={() => toggleInlineStyle('STRIKETHROUGH')}
-          children={<Strikethrough />}
-        />
-        <EditorButton
-          onClick={() => toggleInlineStyle('HIGHLIGHT')}
-          children={<ColorFill />}
-        />
+        <InlineStyleButtons toggleInlineStyle={toggleInlineStyle} />
       </div>
     </div>
   );

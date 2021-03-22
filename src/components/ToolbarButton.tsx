@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-const EditorButton: React.FC<
+const ToolbarButton: React.FC<
   React.ComponentPropsWithoutRef<'button'>
 > = props => {
   const { className, ...otherProps } = props;
@@ -19,4 +19,4 @@ const EditorButton: React.FC<
   );
 };
 
-export default EditorButton;
+export default ToolbarButton;

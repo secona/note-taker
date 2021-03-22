@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Note from './components/Note';
+import NoteCard from './components/NoteCard';
 import NoteEditor from './components/NoteEditor';
 import NoteGrid from './components/NoteGrid';
 import { getAllData } from './lib/db';
@@ -22,7 +22,7 @@ const App: React.FC = () => {
         <Route path='/'>
           <NoteGrid>
             {data?.map((note: INote) => (
-              <Note note={note} />
+              <NoteCard note={note} />
             ))}
           </NoteGrid>
         </Route>

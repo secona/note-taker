@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { INote } from '../NoteReducer';
 
-const Note: React.FC<{ note: INote }> = ({ note }) => {
+const NoteCard: React.FC<{ note: INote }> = ({ note }) => {
   return (
     <div className='border border-gray-200 w-52 p-4 m-1 rounded-md justify-center flex flex-col hover:shadow-md'>
       <p className='text-2xl font-semibold truncate'>
@@ -16,4 +16,4 @@ const Note: React.FC<{ note: INote }> = ({ note }) => {
   );
 };
 
-export default Note;
+export default NoteCard;
