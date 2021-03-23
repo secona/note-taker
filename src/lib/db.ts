@@ -1,23 +1,23 @@
-import { INote } from '../NoteReducer';
+import { INote } from './note';
 import { EditorState } from 'draft-js';
 
-const data: INote[] = [
-  {
-    id: 'j38H2jdUI19j2Yh',
+export type Data = { [id: string]: INote };
+
+const data: Data = {
+  j38H2jdUI19j2Yh: {
     title: 'My Note',
     note: EditorState.createEmpty(),
   },
-  {
-    id: '2iD71hduOp0Qm4r',
+  '2iD71hduOp0Qm4r': {
     title: 'Next Note',
     note: EditorState.createEmpty(),
   },
-];
+};
 
 export function getAllData() {
   return data;
 }
 
 export function getDataById(id: string) {
-  return data.find(note => note.id === id);
+  return data[id];
 }

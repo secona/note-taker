@@ -3,11 +3,10 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import NoteCard from './components/NoteCard';
 import NoteEditor from './components/NoteEditor';
 import NoteGrid from './components/NoteGrid';
-import { getAllData } from './lib/db';
-import { INote } from './NoteReducer';
+import { getAllData, Data } from './lib/db';
 
 const App: React.FC = () => {
-  const [data, setData] = useState<INote[]>();
+  const [data, setData] = useState<Data>({});
   useEffect(() => {
     const response = getAllData();
     setData(response);
@@ -21,8 +20,8 @@ const App: React.FC = () => {
         </Route>
         <Route path='/'>
           <NoteGrid>
-            {data?.map((note: INote) => (
-              <NoteCard note={note} />
+            {Object.keys(data).map((key: string) => (
+              <NoteCard id={key} note={data[key]} />
             ))}
           </NoteGrid>
         </Route>

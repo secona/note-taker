@@ -3,17 +3,17 @@ import { RichUtils } from 'draft-js';
 import { Link } from 'react-router-dom';
 import TextInput from './TextInput';
 import InlineStyleButtons from './InlineStyleButtons';
-import { NoteAction, INote } from '../NoteReducer';
+import { INote } from '../lib/note';
 
 interface Props {
-  dispatch: React.Dispatch<NoteAction>;
+  setState: React.Dispatch<React.SetStateAction<INote | null>>;
   state: INote;
 }
 
-const Toolbar: React.FC<Props> = ({ state, dispatch }) => {
+const Toolbar: React.FC<Props> = ({ state, setState }) => {
   const toggleInlineStyle = (inlineStyle: string) => {
     const newNote = RichUtils.toggleInlineStyle(state.note, inlineStyle);
-    dispatch({ type: 'updateNote', payload: newNote });
+    setState(prev => ({ ...prev!, note: newNote }));
   };
 
   return (
@@ -27,9 +27,7 @@ const Toolbar: React.FC<Props> = ({ state, dispatch }) => {
       <TextInput
         className='w-full'
         value={state.title}
-        onChange={e =>
-          dispatch({ type: 'updateTitle', payload: e.target.value })
-        }
+        onChange={e => setState(prev => ({ ...prev!, title: e.target.value }))}
       />
       <div className='flex flex-row flex-wrap space-x-1'>
         <InlineStyleButtons toggleInlineStyle={toggleInlineStyle} />

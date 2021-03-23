@@ -1,8 +1,14 @@
-import React, { useEffect, useReducer, useRef } from 'react';
-import { EditorState, Editor, RichUtils, DraftStyleMap } from 'draft-js';
+import React, { useRef, useState, useEffect } from 'react';
+import {
+  Editor,
+  RichUtils,
+  DraftStyleMap,
+  EditorState,
+  DraftEditorCommand,
+} from 'draft-js';
 import { useParams } from 'react-router';
 import { getDataById } from '../lib/db';
-import { NoteReducer, EmptyInitialValue } from '../NoteReducer';
+import { INote } from '../lib/note';
 import Toolbar from './Toolbar';
 import '../NoteEditor.css';
 
@@ -13,24 +19,18 @@ const styleMap: DraftStyleMap = {
 
 const NoteEditor: React.FC = () => {
   const editor = useRef<Editor>(null);
-  const [state, dispatch] = useReducer(NoteReducer, EmptyInitialValue);
+  const [state, setState] = useState<INote | null>(null);
   const { id } = useParams<{ id: string }>();
 
-  useEffect(() => {
-    const result = getDataById(id);
-    if (result) dispatch({ type: 'updateAll', payload: result });
-  }, []);
+  useEffect(() => setState(getDataById(id)), []);
 
-  if (state.id === '') {
-    // TODO: 404 component
-    return <p>404 note not found</p>;
-  }
+  if (!state) return <p>404 Note not found!</p>;
 
   const setNote = (newNote: EditorState) => {
-    dispatch({ type: 'updateNote', payload: newNote });
+    setState(prev => ({ ...prev!, note: newNote }));
   };
 
-  const handleKeyCommand = (command: string) => {
+  const handleKeyCommand = (command: DraftEditorCommand) => {
     const newNote = RichUtils.handleKeyCommand(state.note, command);
     if (newNote) {
       setNote(newNote);
@@ -41,7 +41,7 @@ const NoteEditor: React.FC = () => {
 
   return (
     <>
-      <Toolbar state={state} dispatch={dispatch} />
+      <Toolbar state={state} setState={setState} />
       <div className='h-screen' onClick={() => editor.current?.focus()}>
         <Editor
           customStyleMap={styleMap}
