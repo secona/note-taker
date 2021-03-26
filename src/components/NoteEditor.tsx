@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import {
   Editor,
   RichUtils,
@@ -8,7 +8,6 @@ import {
 } from 'draft-js';
 import { useParams } from 'react-router';
 import { useNoteState } from '../lib/db';
-import { INote } from '../lib/note';
 import Toolbar from './Toolbar';
 import '../NoteEditor.css';
 
