@@ -1,8 +1,14 @@
 import { EditorState } from 'draft-js';
 
-export interface INote {
+export interface INote<NoteType = EditorState> {
   title: string;
-  note: EditorState;
+  note: NoteType;
+}
+
+export interface INoteWithId<NoteType = EditorState> {
+  id: string;
+  title: string;
+  note: NoteType;
 }
 
 export const EmptyNote: INote = {

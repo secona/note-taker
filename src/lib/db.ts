@@ -1,23 +1,97 @@
-import { INote } from './note';
-import { EditorState } from 'draft-js';
+import { Dispatch, useEffect, useState, SetStateAction } from 'react';
+import localforage from 'localforage';
+import { nanoid } from 'nanoid';
+import {
+  EditorState,
+  convertFromRaw,
+  RawDraftContentState,
+  ContentState,
+} from 'draft-js';
+import { INote, INoteWithId } from './note';
 
-export type Data = { [id: string]: INote };
-
-const data: Data = {
-  j38H2jdUI19j2Yh: {
-    title: 'My Note',
-    note: EditorState.createEmpty(),
-  },
-  '2iD71hduOp0Qm4r': {
-    title: 'Next Note',
-    note: EditorState.createEmpty(),
-  },
-};
-
-export function getAllData() {
-  return data;
+export interface Response<ResultType> {
+  result: ResultType;
+  loading: boolean;
+  error: any;
 }
 
-export function getDataById(id: string) {
-  return data[id];
+export function useNoteState(
+  id: string
+): Response<[INote | null, Dispatch<SetStateAction<INote | null>>]> {
+  const [result, setResult] = useState<INote | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    const getNote = async () => {
+      try {
+        const rawNote = await localforage.getItem<INote<RawDraftContentState>>(
+          id
+        );
+        if (rawNote) {
+          const { title } = rawNote;
+          const note = EditorState.createWithContent(
+            convertFromRaw(rawNote.note)
+          );
+          setResult({ title, note });
+        }
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    getNote();
+  }, []);
+
+  return {
+    result: [result, setResult],
+    loading,
+    error,
+  };
+}
+
+export function useAllNotes(): Response<INoteWithId<ContentState>[]> {
+  const [result, setResult] = useState<INoteWithId<ContentState>[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    const getNotes = async () => {
+      try {
+        const ids = await localforage.keys();
+        let notes: INoteWithId<ContentState>[] = [];
+        for (const id of ids) {
+          const rawNote = await localforage.getItem<
+            INote<RawDraftContentState>
+          >(id);
+          if (rawNote) {
+            const note = convertFromRaw(rawNote.note);
+            notes.push({ id, title: rawNote.title, note });
+          }
+        }
+        setResult(notes);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+      }
+    };
+    getNotes();
+  }, []);
+
+  return { result, loading, error };
+}
+
+/**
+ * @returns id of the new note
+ */
+export async function CreateNewNote(): Promise<String> {
+  const id = nanoid();
+  await localforage.setItem<INote<RawDraftContentState>>(id, {
+    title: '',
+    note: { blocks: [], entityMap: {} },
+  });
+  return id;
 }

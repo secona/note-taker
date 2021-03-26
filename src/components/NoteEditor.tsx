@@ -7,7 +7,7 @@ import {
   DraftEditorCommand,
 } from 'draft-js';
 import { useParams } from 'react-router';
-import { getDataById } from '../lib/db';
+import { useNoteState } from '../lib/db';
 import { INote } from '../lib/note';
 import Toolbar from './Toolbar';
 import '../NoteEditor.css';
@@ -19,11 +19,15 @@ const styleMap: DraftStyleMap = {
 
 const NoteEditor: React.FC = () => {
   const editor = useRef<Editor>(null);
-  const [state, setState] = useState<INote | null>(null);
   const { id } = useParams<{ id: string }>();
+  const {
+    result: [state, setState],
+    loading,
+    error,
+  } = useNoteState(id);
 
-  useEffect(() => setState(getDataById(id)), []);
-
+  if (error) return <p>Error!</p>;
+  if (loading) return <p>Loading...</p>;
   if (!state) return <p>404 Note not found!</p>;
 
   const setNote = (newNote: EditorState) => {

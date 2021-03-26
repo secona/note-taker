@@ -26,6 +26,7 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
       </Link>
       <TextInput
         className='w-full'
+        placeholder='Untitled Note'
         value={state.title}
         onChange={e => setState(prev => ({ ...prev!, title: e.target.value }))}
       />
