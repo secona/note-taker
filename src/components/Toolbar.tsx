@@ -1,8 +1,8 @@
 import React from 'react';
-import { RichUtils } from 'draft-js';
+import { RichUtils, EditorState } from 'draft-js';
 import { Link } from 'react-router-dom';
 import TextInput from './TextInput';
-import InlineStyleButtons from './InlineStyleButtons';
+import ToolbarButtons from './ToolbarButtons';
 import { INote } from '../lib/note';
 
 interface Props {
@@ -14,6 +14,19 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
   const toggleInlineStyle = (inlineStyle: string) => {
     const newNote = RichUtils.toggleInlineStyle(state.note, inlineStyle);
     setState(prev => ({ ...prev!, note: newNote }));
+  };
+
+  const toggleBlockType = (blockType: string) => {
+    const newNote = RichUtils.toggleBlockType(state.note, blockType);
+    setState(prev => ({ ...prev!, note: newNote }));
+  };
+
+  const undo = () => {
+    setState(prev => ({ ...prev!, note: EditorState.undo(state.note) }));
+  };
+
+  const redo = () => {
+    setState(prev => ({ ...prev!, note: EditorState.redo(state.note) }));
   };
 
   return (
@@ -31,7 +44,12 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
         onChange={e => setState(prev => ({ ...prev!, title: e.target.value }))}
       />
       <div className='flex flex-row flex-wrap space-x-1'>
-        <InlineStyleButtons toggleInlineStyle={toggleInlineStyle} />
+        <ToolbarButtons
+          toggleInlineStyle={toggleInlineStyle}
+          toggleBlockType={toggleBlockType}
+          undo={undo}
+          redo={redo}
+        />
       </div>
     </div>
   );
