@@ -1,9 +1,9 @@
 import React from 'react';
 import { RichUtils, EditorState } from 'draft-js';
 import { Link } from 'react-router-dom';
-import TextInput from './TextInput';
+import TextInput from '../TextInput';
 import ToolbarButtons from './ToolbarButtons';
-import { INote } from '../lib/note';
+import { INote } from '../../lib/note';
 
 interface Props {
   setState: React.Dispatch<React.SetStateAction<INote | null>>;

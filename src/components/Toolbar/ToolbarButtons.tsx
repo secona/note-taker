@@ -25,7 +25,10 @@ const ToolbarButtons: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <select onChange={e => toggleBlockType(e.target.value)}>
+      <select
+        onChange={e => toggleBlockType(e.target.value)}
+        defaultValue='unstyled'
+      >
         <option value='header-one'>Header One</option>
         <option value='header-two'>Header Two</option>
         <option value='header-three'>Header Three</option>
