@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import {
   EditorState,
   convertFromRaw,
+  convertToRaw,
   RawDraftContentState,
   ContentState,
 } from 'draft-js';
@@ -94,4 +95,17 @@ export async function CreateNewNote(): Promise<String> {
     note: { blocks: [], entityMap: {} },
   });
   return id;
+}
+
+export async function SaveNote(id: string, note: INote) {
+  const rawNote = convertToRaw(note.note.getCurrentContent());
+  try {
+    await localforage.setItem<INote<RawDraftContentState>>(id, {
+      title: note.title,
+      note: rawNote,
+    });
+    return 'success';
+  } catch (err) {
+    return 'error';
+  }
 }

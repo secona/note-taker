@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RichUtils, EditorState } from 'draft-js';
-import { Link } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import TextInput from '../TextInput';
 import ToolbarButtons from './ToolbarButtons';
 import { INote } from '../../lib/note';
+import { SaveNote } from '../../lib/db';
 
 interface Props {
   setState: React.Dispatch<React.SetStateAction<INote | null>>;
@@ -11,6 +12,11 @@ interface Props {
 }
 
 const Toolbar: React.FC<Props> = ({ state, setState }) => {
+  const { id } = useParams<{ id: string }>();
+  const [redirect, setRedirect] = useState('');
+
+  if (redirect) return <Redirect to={redirect} />;
+
   const toggleInlineStyle = (inlineStyle: string) => {
     const newNote = RichUtils.toggleInlineStyle(state.note, inlineStyle);
     setState(prev => ({ ...prev!, note: newNote }));
@@ -31,12 +37,16 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
 
   return (
     <div className='fixed top-0 w-full flex flex-col p-3 bg-white rounded-b-md space-y-2 shadow-md'>
-      <Link to='/'>
-        <button>
-          {/* temproary */}
-          Back
-        </button>
-      </Link>
+      <button
+        onClick={async () => {
+          const result = await SaveNote(id, state);
+          if (result === 'success') setRedirect('/');
+          else console.log('Error!');
+        }}
+      >
+        {/* temproary */}
+        Back
+      </button>
       <TextInput
         className='w-full'
         placeholder='Untitled Note'
