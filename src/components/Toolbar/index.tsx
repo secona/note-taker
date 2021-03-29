@@ -5,6 +5,8 @@ import TextInput from '../TextInput';
 import ToolbarButtons from './ToolbarButtons';
 import { INote } from '../../lib/note';
 import { SaveNote } from '../../lib/db';
+import Button from '../Button';
+import { MdArrowBack } from 'react-icons/md';
 
 interface Props {
   setState: React.Dispatch<React.SetStateAction<INote | null>>;
@@ -37,22 +39,24 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
 
   return (
     <div className='fixed top-0 w-full flex flex-col p-3 bg-white rounded-b-md space-y-2 shadow-md'>
-      <button
-        onClick={async () => {
-          const result = await SaveNote(id, state);
-          if (result === 'success') setRedirect('/');
-          else console.log('Error!');
-        }}
-      >
-        {/* temproary */}
-        Back
-      </button>
-      <TextInput
-        className='w-full'
-        placeholder='Untitled Note'
-        value={state.title}
-        onChange={e => setState(prev => ({ ...prev!, title: e.target.value }))}
-      />
+      <div className='flex space-x-1'>
+        <Button
+          onClick={async () => {
+            const result = await SaveNote(id, state);
+            if (result === 'success') setRedirect('/');
+            else console.log('Error!');
+          }}
+          children={<MdArrowBack />}
+        />
+        <TextInput
+          className='flex-grow'
+          placeholder='Untitled Note'
+          value={state.title}
+          onChange={e =>
+            setState(prev => ({ ...prev!, title: e.target.value }))
+          }
+        />
+      </div>
       <div className='flex flex-row flex-wrap space-x-1'>
         <ToolbarButtons
           toggleInlineStyle={toggleInlineStyle}

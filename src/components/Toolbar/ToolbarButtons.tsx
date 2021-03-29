@@ -8,6 +8,8 @@ import {
   MdFormatColorFill,
   MdUndo,
   MdRedo,
+  MdFormatListNumbered,
+  MdFormatListBulleted,
 } from 'react-icons/md';
 
 interface Props {
@@ -56,6 +58,14 @@ const ToolbarButtons: React.FC<Props> = ({
       <ToolbarButton
         onClick={() => toggleInlineStyle('HIGHLIGHT')}
         children={<MdFormatColorFill />}
+      />
+      <ToolbarButton
+        onClick={() => toggleInlineStyle('ordered-list-item')}
+        children={<MdFormatListNumbered />}
+      />
+      <ToolbarButton
+        onClick={() => toggleInlineStyle('unordered-list-item')}
+        children={<MdFormatListBulleted />}
       />
       <ToolbarButton onClick={undo} children={<MdUndo />} />
       <ToolbarButton onClick={redo} children={<MdRedo />} />
