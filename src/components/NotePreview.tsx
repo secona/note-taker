@@ -5,13 +5,16 @@ interface Props {
   note: ContentState;
 }
 
-const NotePreview: React.FC<Props & React.ComponentPropsWithoutRef<'p'>> = ({
-  note,
-  ...otherProps
-}) => {
-  const noteInText = note.getPlainText();
-  const preview = noteInText ? noteInText.substring(50) + '...' : '';
-  return <p {...otherProps}>{preview}</p>;
+type FullProps = Props & React.ComponentPropsWithoutRef<'p'>;
+
+function Truncate(text: string, amount: number = 50): string {
+  const length = text.length;
+  if (length <= amount) return text;
+  return text.substring(0, amount) + '...';
+}
+
+const NotePreview: React.FC<FullProps> = ({ note, ...otherProps }) => {
+  return <p {...otherProps}>{Truncate(note.getPlainText())}</p>;
 };
 
 export default NotePreview;
