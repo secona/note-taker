@@ -7,6 +7,7 @@ import { INote } from '../../lib/note';
 import { SaveNote } from '../../lib/db';
 import Button from '../Button';
 import { MdArrowBack } from 'react-icons/md';
+import LoadingIcon from '../LoadingIcon';
 
 interface Props {
   setState: React.Dispatch<React.SetStateAction<INote | null>>;
@@ -16,6 +17,7 @@ interface Props {
 const Toolbar: React.FC<Props> = ({ state, setState }) => {
   const { id } = useParams<{ id: string }>();
   const [redirect, setRedirect] = useState('');
+  const [loading, setLoading] = useState(false);
 
   if (redirect) return <Redirect to={redirect} />;
 
@@ -42,11 +44,12 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
       <div className='flex space-x-1'>
         <Button
           onClick={async () => {
+            setLoading(true);
             const result = await SaveNote(id, state);
             if (result === 'success') setRedirect('/');
             else console.log('Error!');
           }}
-          children={<MdArrowBack />}
+          children={loading ? <LoadingIcon /> : <MdArrowBack size={24} />}
         />
         <TextInput
           className='flex-grow'
