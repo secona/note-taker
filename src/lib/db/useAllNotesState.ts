@@ -1,10 +1,15 @@
 import { ContentState, convertFromRaw, RawDraftContentState } from 'draft-js';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import localforage from 'localforage';
-import { Response } from '../db';
+import { Response } from '.';
 import { INote, INoteWithId } from '../note';
 
-export function useAllNotes(): Response<INoteWithId<ContentState>[]> {
+export function useAllNotesState(): Response<
+  [
+    INoteWithId<ContentState>[],
+    Dispatch<SetStateAction<INoteWithId<ContentState>[]>>
+  ]
+> {
   const [result, setResult] = useState<INoteWithId<ContentState>[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
@@ -33,5 +38,5 @@ export function useAllNotes(): Response<INoteWithId<ContentState>[]> {
     getNotes();
   }, []);
 
-  return { result, loading, error };
+  return { result: [result, setResult], loading, error };
 }

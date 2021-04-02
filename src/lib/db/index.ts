@@ -5,6 +5,6 @@ export interface Response<ResultType> {
 }
 
 export * from './useNoteState';
-export * from './useAllNotes';
+export * from './useAllNotesState';
 export * from './createNewNote';
 export * from './saveNote';

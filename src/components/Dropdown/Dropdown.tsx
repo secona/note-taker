@@ -16,14 +16,14 @@ const Dropdown: React.FC<Props> = ({
   const node = React.useRef<HTMLDivElement>(null);
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if ((node.current! as any).contains(e.target)) return;
-    setOpen(false);
+  const closeDropdown = () => {
+    if (open) setOpen(false);
   };
 
+  // TODO: fix mouse down behaviour
   React.useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', closeDropdown);
+    return () => document.removeEventListener('mousedown', closeDropdown);
   }, []);
 
   return (

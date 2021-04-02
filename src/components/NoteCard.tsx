@@ -7,9 +7,10 @@ import { Dropdown, DropdownItem } from './Dropdown';
 
 interface Props {
   note: INoteWithId<ContentState>;
+  deleteNote: (id: string) => void;
 }
 
-const NoteCard: React.FC<Props> = ({ note }) => {
+const NoteCard: React.FC<Props> = ({ note, deleteNote }) => {
   return (
     <div className='border h-12 px-3 m-1 rounded-md bg-white flex flex-row-reverse items-center'>
       <Dropdown
@@ -18,7 +19,7 @@ const NoteCard: React.FC<Props> = ({ note }) => {
         buttonClassName='rounded-full focus:outline-none'
       >
         <DropdownItem
-          onClick={() => console.log('Delete')} // temporary
+          onClick={() => deleteNote(note.id)} // temporary
           icon={<MdDelete />}
           children='Delete Note'
         />
