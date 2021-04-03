@@ -19,7 +19,8 @@ const NoteCard: React.FC<Props> = ({ note, deleteNote }) => {
         buttonClassName='rounded-full focus:outline-none'
       >
         <DropdownItem
-          onClick={() => deleteNote(note.id)} // temporary
+          onClick={() => deleteNote(note.id)}
+          closeOnClick={true}
           icon={<MdDelete />}
           children='Delete Note'
         />

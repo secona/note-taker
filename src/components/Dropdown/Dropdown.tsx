@@ -1,5 +1,6 @@
 import React from 'react';
 import DropdownItemContainer from './DropdownItemContainer';
+import { DropdownContext } from '../../lib/DropdownContext';
 
 interface Props {
   icon: React.ReactNode;
@@ -16,14 +17,13 @@ const Dropdown: React.FC<Props> = ({
   const node = React.useRef<HTMLDivElement>(null);
   const [open, setOpen] = React.useState(false);
 
-  const closeDropdown = () => {
-    if (open) setOpen(false);
+  const handleClick = (e: MouseEvent) => {
+    if (!(node.current! as any).contains(e.target)) setOpen(false);
   };
 
-  // TODO: fix mouse down behaviour
   React.useEffect(() => {
-    document.addEventListener('mousedown', closeDropdown);
-    return () => document.removeEventListener('mousedown', closeDropdown);
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
   return (
@@ -33,7 +33,14 @@ const Dropdown: React.FC<Props> = ({
         onClick={() => setOpen(!open)}
         children={icon}
       />
-      {open && <DropdownItemContainer>{children}</DropdownItemContainer>}
+      {open && (
+        <DropdownItemContainer>
+          <DropdownContext.Provider
+            value={{ closeDropdown: () => setOpen(false) }}
+            children={children}
+          />
+        </DropdownItemContainer>
+      )}
     </div>
   );
 };
