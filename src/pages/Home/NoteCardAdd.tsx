@@ -1,8 +1,8 @@
 import React from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useHistory } from 'react-router';
-import { CreateNewNote } from '../lib/db';
-import LoadingIcon from './LoadingIcon';
+import { CreateNewNote } from '@lib/db';
+import LoadingIcon from '@components/LoadingIcon';
 
 const NoteCardAdd: React.FC = () => {
   const history = useHistory();

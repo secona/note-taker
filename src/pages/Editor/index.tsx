@@ -7,10 +7,10 @@ import {
   DraftEditorCommand,
 } from 'draft-js';
 import { useParams } from 'react-router';
-import { useNoteState } from '../lib/db';
+import { useNoteState } from '@lib/db';
 import { blockRenderMap } from './blockRenderMap';
 import Toolbar from './Toolbar';
-import '../NoteEditor.css';
+import './Editor.css';
 import 'draft-js/dist/Draft.css';
 
 const styleMap: DraftStyleMap = {

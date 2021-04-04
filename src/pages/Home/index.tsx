@@ -1,6 +1,6 @@
 import React from 'react';
 import localforage from 'localforage';
-import { useAllNotesState } from '../lib/db';
+import { useAllNotesState } from '@lib/db';
 import NoteCard from './NoteCard';
 import NoteCardAdd from './NoteCardAdd';
 import NoteGrid from './NoteGrid';

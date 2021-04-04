@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { RichUtils, EditorState } from 'draft-js';
 import { Redirect, useParams } from 'react-router-dom';
-import TextInput from '../TextInput';
+import TextInput from '@components/TextInput';
 import ToolbarButtons from './ToolbarButtons';
-import { INote } from '../../lib/note';
-import { SaveNote } from '../../lib/db';
-import Button from '../Button';
+import { INote } from '@lib/note';
+import { SaveNote } from '@lib/db';
+import Button from '@components/Button';
 import { MdArrowBack } from 'react-icons/md';
-import LoadingIcon from '../LoadingIcon';
+import LoadingIcon from '@components/LoadingIcon';
 
 interface Props {
   setState: React.Dispatch<React.SetStateAction<INote | null>>;
