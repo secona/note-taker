@@ -5,7 +5,7 @@ import TextInput from '@components/TextInput';
 import ToolbarButtons from './ToolbarButtons';
 import { INote } from '@lib/note';
 import { SaveNote } from '@lib/db';
-import Button from '@components/Button';
+import { IconButton } from '@components/Button';
 import { MdArrowBack } from 'react-icons/md';
 import LoadingIcon from '@components/LoadingIcon';
 
@@ -42,7 +42,8 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
   return (
     <div className='fixed top-0 w-full flex flex-col p-3 bg-white rounded-b-md space-y-2 shadow-md'>
       <div className='flex space-x-1'>
-        <Button
+        <IconButton
+          color='secondary'
           onClick={async () => {
             setLoading(true);
             const result = await SaveNote(id, state);
