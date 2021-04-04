@@ -6,7 +6,7 @@ import { INote } from '../note';
 /**
  * @returns id of the new note
  */
-export async function CreateNewNote(): Promise<String> {
+export async function newNote(): Promise<String> {
   const id = nanoid();
   await localforage.setItem<INote<RawDraftContentState>>(id, {
     title: '',

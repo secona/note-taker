@@ -2,8 +2,8 @@ import React from 'react';
 import localforage from 'localforage';
 import { useAllNotesState } from '@lib/db';
 import NoteCard from './NoteCard';
-import NoteCardAdd from './NoteCardAdd';
 import NoteGrid from './NoteGrid';
+import Header from './Header';
 
 const Home: React.FC = () => {
   const {
@@ -23,14 +23,15 @@ const Home: React.FC = () => {
   if (error) return <p>Error!</p>;
 
   return (
-    <div className='container mx-auto'>
-      <p className='text-xl font-black py-3 text-center'>NOTETAKER</p>
-      <NoteGrid>
-        {notes.map(note => (
-          <NoteCard note={note} deleteNote={deleteNote} />
-        ))}
-        <NoteCardAdd />
-      </NoteGrid>
+    <div className='h-screen w-screen bg-gray-100'>
+      <div className='container mx-auto'>
+        <Header />
+        <NoteGrid>
+          {notes.map(note => (
+            <NoteCard note={note} deleteNote={deleteNote} />
+          ))}
+        </NoteGrid>
+      </div>
     </div>
   );
 };

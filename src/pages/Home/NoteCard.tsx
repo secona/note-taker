@@ -12,7 +12,7 @@ interface Props {
 
 const NoteCard: React.FC<Props> = ({ note, deleteNote }) => {
   return (
-    <div className='border h-12 px-3 m-1 rounded-md bg-white flex flex-row-reverse items-center'>
+    <div className='h-10 px-3 m-1 rounded-md bg-white flex flex-row-reverse items-center'>
       <Dropdown
         icon={<MdMoreVert size={24} />}
         className='h-6'

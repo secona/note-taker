@@ -16,14 +16,14 @@ const DropdownItem: React.FC<Props> = ({
   const { closeDropdown } = React.useContext(DropdownContext);
   return (
     <button
-      className='flex space-x-2 min-w-full items-center cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-md'
+      className='flex w-full space-x-3 items-center cursor-pointer hover:bg-gray-50 focus:outline-none px-3 py-2 rounded-md'
       onClick={() => {
         onClick();
         if (closeOnClick) closeDropdown();
       }}
     >
       {icon}
-      <p className='text-base'>{children}</p>
+      <p>{children}</p>
     </button>
   );
 };
