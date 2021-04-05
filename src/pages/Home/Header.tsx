@@ -1,8 +1,8 @@
 import { IconButton } from '@components/Button';
+import LoadingIcon from '@components/LoadingIcon';
 import { newNote } from '@lib/db';
 import * as React from 'react';
 import { MdAdd } from 'react-icons/md';
-import { VscLoading } from 'react-icons/vsc';
 import { useHistory } from 'react-router';
 
 const Header = () => {
@@ -21,12 +21,9 @@ const Header = () => {
             .then(id => history.push(`/${id}`))
             .catch(err => console.log(err));
         }}
+        disabled={loading}
       >
-        {loading ? (
-          <VscLoading color='#FFFFFF' size={24} />
-        ) : (
-          <MdAdd color='#FFFFFF' size={24} />
-        )}
+        {loading ? <LoadingIcon /> : <MdAdd color='#FFFFFF' size={24} />}
       </IconButton>
     </div>
   );

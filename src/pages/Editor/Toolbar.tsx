@@ -50,6 +50,7 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
             if (result === 'success') setRedirect('/');
             else console.log('Error!');
           }}
+          disabled={loading}
           children={loading ? <LoadingIcon /> : <MdArrowBack size={24} />}
         />
         <TextInput
