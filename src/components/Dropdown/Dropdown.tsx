@@ -1,11 +1,12 @@
 import React from 'react';
 import DropdownItemContainer from './DropdownItemContainer';
-import { DropdownContext } from '../../lib/DropdownContext';
+import { DropdownItemProps } from './DropdownItem';
 
 interface Props {
   icon: React.ReactNode;
   className?: string;
   buttonClassName?: string;
+  children: React.ReactElement<DropdownItemProps>;
 }
 
 const Dropdown: React.FC<Props> = ({
@@ -35,10 +36,11 @@ const Dropdown: React.FC<Props> = ({
       />
       {open && (
         <DropdownItemContainer>
-          <DropdownContext.Provider
-            value={{ closeDropdown: () => setOpen(false) }}
-            children={children}
-          />
+          {React.Children.map(
+            children,
+            (child: React.ReactElement<DropdownItemProps>) =>
+              React.cloneElement(child, { closeDropdown: () => setOpen(false) })
+          )}
         </DropdownItemContainer>
       )}
     </div>
