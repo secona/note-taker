@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { RichUtils, EditorState } from 'draft-js';
 import { Redirect, useParams } from 'react-router-dom';
-import TextInput from '@components/TextInput';
 import ToolbarButtons from './ToolbarButtons';
 import { INote } from '@lib/note';
 import { SaveNote } from '@lib/db';
@@ -40,10 +39,10 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
   };
 
   return (
-    <div className='fixed top-0 w-full flex flex-col p-3 bg-white rounded-b-md space-y-2 shadow-md'>
-      <div className='flex space-x-1'>
+    <div className='fixed w-full top-2 z-10'>
+      <div className='container mx-auto shadow-lg rounded-lg bg-blue-500 flex space-x-1 p-1'>
         <IconButton
-          color='secondary'
+          color='primary'
           onClick={async () => {
             setLoading(true);
             const result = await SaveNote(id, state);
@@ -51,18 +50,8 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
             else console.log('Error!');
           }}
           disabled={loading}
-          children={loading ? <LoadingIcon /> : <MdArrowBack size={24} />}
+          children={loading ? <LoadingIcon size={16} /> : <MdArrowBack />}
         />
-        <TextInput
-          className='flex-grow'
-          placeholder='Untitled Note'
-          value={state.title}
-          onChange={e =>
-            setState(prev => ({ ...prev!, title: e.target.value }))
-          }
-        />
-      </div>
-      <div className='flex flex-row flex-wrap space-x-1'>
         <ToolbarButtons
           toggleInlineStyle={toggleInlineStyle}
           toggleBlockType={toggleBlockType}

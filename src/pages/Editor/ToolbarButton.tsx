@@ -1,21 +1,34 @@
 import React from 'react';
 import clsx from 'clsx';
+import { IconType } from 'react-icons/lib';
 
-const ToolbarButton: React.FC<
-  React.ComponentPropsWithoutRef<'button'>
-> = props => {
-  const { className, ...otherProps } = props;
+interface Props {
+  className?: string;
+  iconSize?: number;
+  active: boolean;
+  Icon: IconType;
+  onClick: () => void;
+}
+
+const ToolbarButton = (props: Props) => {
+  const { className, Icon, active, iconSize = 16, ...otherProps } = props;
 
   return (
     <button
       className={clsx(
-        'border border-gray-200',
-        'rounded',
-        'focus:outline-none focus:ring focus:border-transparent',
+        'hover:bg-blue-600 rounded-md focus:outline-none p-0.5',
         className
       )}
       {...otherProps}
-    />
+    >
+      <Icon
+        className={clsx(
+          'fill-current',
+          active ? 'text-blue-300' : 'text-white'
+        )}
+        size={iconSize}
+      />
+    </button>
   );
 };
 

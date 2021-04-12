@@ -40,35 +40,42 @@ const ToolbarButtons: React.FC<Props> = ({
         <option value='unstyled'>Paragraph</option>
       </select>
       <ToolbarButton
+        active={false}
         onClick={() => toggleInlineStyle('BOLD')}
-        children={<MdFormatBold />}
+        Icon={MdFormatBold}
       />
       <ToolbarButton
+        active={false}
         onClick={() => toggleInlineStyle('ITALIC')}
-        children={<MdFormatItalic />}
+        Icon={MdFormatItalic}
       />
       <ToolbarButton
+        active={false}
         onClick={() => toggleInlineStyle('UNDERLINE')}
-        children={<MdFormatUnderlined />}
+        Icon={MdFormatUnderlined}
       />
       <ToolbarButton
+        active={false}
         onClick={() => toggleInlineStyle('STRIKETHROUGH')}
-        children={<MdStrikethroughS />}
+        Icon={MdStrikethroughS}
       />
       <ToolbarButton
+        active={false}
         onClick={() => toggleInlineStyle('HIGHLIGHT')}
-        children={<MdFormatColorFill />}
+        Icon={MdFormatColorFill}
       />
       <ToolbarButton
-        onClick={() => toggleInlineStyle('ordered-list-item')}
-        children={<MdFormatListNumbered />}
+        active={false}
+        onClick={() => toggleBlockType('ordered-list-item')}
+        Icon={MdFormatListNumbered}
       />
       <ToolbarButton
-        onClick={() => toggleInlineStyle('unordered-list-item')}
-        children={<MdFormatListBulleted />}
+        active={false}
+        onClick={() => toggleBlockType('unordered-list-item')}
+        Icon={MdFormatListBulleted}
       />
-      <ToolbarButton onClick={undo} children={<MdUndo />} />
-      <ToolbarButton onClick={redo} children={<MdRedo />} />
+      <ToolbarButton active={false} onClick={undo} Icon={MdUndo} />
+      <ToolbarButton active={false} onClick={redo} Icon={MdRedo} />
     </>
   );
 };

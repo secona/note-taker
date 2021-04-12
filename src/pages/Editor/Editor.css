@@ -1,7 +1,6 @@
 div.DraftEditor-root {
-  position: relative;
-  top: 7rem;
-  padding: 0 0.75rem;
+  padding: 0 0.25rem;
+  margin: 0.5rem 0;
 }
 
 div.DraftEditor-editorContainer,

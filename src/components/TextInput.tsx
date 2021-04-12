@@ -1,16 +1,20 @@
 import React from 'react';
 import clsx from 'clsx';
 
-const TextInput: React.FC<React.ComponentPropsWithoutRef<'input'>> = props => {
-  const { className, type, ...otherProps } = props;
+interface Props extends React.ComponentPropsWithoutRef<'input'> {
+  variant?: 'primary' | 'secondary';
+}
+
+const TextInput = (props: Props) => {
+  const { className, type, variant = 'primary', ...otherProps } = props;
 
   return (
     <input
       className={clsx(
-        'border border-gray-200',
-        'px-2 py-1',
-        'rounded',
-        'focus:outline-none focus:border-transparent focus:ring',
+        'focus:outline-none',
+        variant === 'primary'
+          ? 'border border-gray-200 px-2 py-1 rounded focus:border-transparent focus:ring'
+          : 'p-1 border-b',
         className
       )}
       {...otherProps}
