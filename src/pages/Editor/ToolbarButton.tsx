@@ -11,14 +11,15 @@ interface Props {
 }
 
 const ToolbarButton = (props: Props) => {
-  const { className, Icon, active, iconSize = 16, ...otherProps } = props;
+  const { className, Icon, active, iconSize = 24, ...otherProps } = props;
 
   return (
     <button
       className={clsx(
-        'hover:bg-blue-600 rounded-md focus:outline-none p-0.5',
+        'hover:bg-blue-600 rounded-md focus:outline-none p-1.5',
         className
       )}
+      onMouseDown={e => e.preventDefault()}
       {...otherProps}
     >
       <Icon

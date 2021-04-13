@@ -15,7 +15,7 @@ interface Props {
   selected: string;
   color?: 'primary' | 'secondary';
   buttonClassName?: string;
-  className: string;
+  className?: string;
 }
 
 const Select = (props: Props) => {
@@ -45,7 +45,7 @@ const Select = (props: Props) => {
     <div className={className} ref={node}>
       <button
         className={clsx(
-          'flex focus:outline-none items-center h-6',
+          'flex focus:outline-none items-center py-1.5 px-2.5 rounded-md',
           color === 'primary'
             ? 'bg-blue-500 hover:bg-blue-600 text-white'
             : 'border border-gray-200 hover:bg-gray-50 hover:border-transparent text-black',

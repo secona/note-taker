@@ -4,6 +4,7 @@ import React from 'react';
 interface Props extends React.ComponentPropsWithoutRef<'button'> {
   color: 'primary' | 'secondary';
   icon?: React.ReactNode;
+  children: string;
 }
 
 const Button = ({
@@ -17,7 +18,7 @@ const Button = ({
   return (
     <button
       className={clsx(
-        'inline-flex px-3 py-2 rounded-md space-x-1.5 focus:outline-none focus:ring fill-current',
+        'inline-flex px-2.5 py-1.5 rounded-md space-x-1.5 focus:outline-none focus:ring fill-current',
         disabled && 'cursor-not-allowed',
         color === 'primary'
           ? 'bg-blue-500 hover:bg-blue-600 text-white'
@@ -28,7 +29,7 @@ const Button = ({
       {...otherProps}
     >
       {icon}
-      {children}
+      <p>{children}</p>
     </button>
   );
 };

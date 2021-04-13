@@ -40,7 +40,7 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
 
   return (
     <div className='fixed w-full top-2 z-10'>
-      <div className='container mx-auto shadow-lg rounded-lg bg-blue-500 flex items-center space-x-1 p-1'>
+      <div className='container mx-auto shadow-lg rounded-lg bg-blue-500 flex items-center space-x-0.5 p-1'>
         <IconButton
           color='primary'
           onClick={async () => {
@@ -50,7 +50,7 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
             else console.log('Error!');
           }}
           disabled={loading}
-          children={loading ? <LoadingIcon size={16} /> : <MdArrowBack />}
+          children={loading ? <LoadingIcon /> : <MdArrowBack size={24} />}
         />
         <ToolbarButtons
           toggleInlineStyle={toggleInlineStyle}

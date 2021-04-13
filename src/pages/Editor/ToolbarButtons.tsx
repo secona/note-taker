@@ -29,8 +29,6 @@ const ToolbarButtons: React.FC<Props> = ({
   return (
     <>
       <Select
-        className='h-6'
-        buttonClassName='py-1 px-2 rounded-lg'
         selected='unstyled'
         options={[
           { value: 'header-one', label: 'Header One' },
