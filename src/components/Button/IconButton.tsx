@@ -9,7 +9,6 @@ interface Props extends React.ComponentPropsWithoutRef<'button'> {
 
 const IconButton = ({
   color = 'primary',
-  children,
   className,
   disabled,
   ...otherProps
@@ -17,24 +16,16 @@ const IconButton = ({
   return (
     <button
       className={clsx(
-        'p-1.5 rounded-md focus:outline-none focus:ring',
+        'p-1.5 rounded-md focus:outline-none focus:ring fill-current',
         disabled && 'cursor-not-allowed',
         color === 'primary'
-          ? 'bg-blue-500 hover:bg-blue-600'
-          : 'border border-gray-200 hover:bg-gray-50 hover:border-transparent',
+          ? 'bg-blue-500 hover:bg-blue-600 text-white'
+          : 'border border-gray-200 hover:bg-gray-50 hover:border-transparent text-black',
         className
       )}
       disabled={disabled}
       {...otherProps}
-    >
-      {React.cloneElement(children, {
-        className: clsx(
-          children.props.className,
-          'fill-current',
-          color === 'primary' ? 'text-white' : 'text-black'
-        ),
-      })}
-    </button>
+    />
   );
 };
 

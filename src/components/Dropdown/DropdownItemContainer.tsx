@@ -7,7 +7,7 @@ const DropdownItemContainer: React.FC<
   return (
     <div
       className={clsx(
-        'absolute min-w-60 rounded-md bg-white shadow-md',
+        'absolute min-w-60 rounded-md bg-white shadow-lg',
         className
       )}
       {...otherProps}

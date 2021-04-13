@@ -11,6 +11,7 @@ import {
   MdFormatListNumbered,
   MdFormatListBulleted,
 } from 'react-icons/md';
+import Select from '@components/Select/Select';
 
 interface Props {
   toggleInlineStyle: (inlineStyle: string) => void;
@@ -27,18 +28,20 @@ const ToolbarButtons: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <select
-        onChange={e => toggleBlockType(e.target.value)}
-        defaultValue='unstyled'
-      >
-        <option value='header-one'>Header One</option>
-        <option value='header-two'>Header Two</option>
-        <option value='header-three'>Header Three</option>
-        <option value='header-four'>Header Four</option>
-        <option value='header-five'>Header Five</option>
-        <option value='header-six'>Header Six</option>
-        <option value='unstyled'>Paragraph</option>
-      </select>
+      <Select
+        className='h-6'
+        buttonClassName='py-1 px-2 rounded-lg'
+        selected='unstyled'
+        options={[
+          { value: 'header-one', label: 'Header One' },
+          { value: 'header-two', label: 'Header Two' },
+          { value: 'header-three', label: 'Header Three' },
+          { value: 'header-four', label: 'Header Four' },
+          { value: 'header-five', label: 'Header Five' },
+          { value: 'header-six', label: 'Header Six' },
+          { value: 'unstyled', label: 'Paragraph' },
+        ]}
+      />
       <ToolbarButton
         active={false}
         onClick={() => toggleInlineStyle('BOLD')}
