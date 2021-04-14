@@ -10,11 +10,11 @@ export const HeaderSix = <p className='text-lg' />;
 
 export const blockRenderMap = DefaultDraftBlockRenderMap.merge(
   Map({
-    'header-one': { element: 'h1', HeaderOne },
-    'header-two': { element: 'h2', HeaderTwo },
-    'header-three': { element: 'h3', HeaderThree },
-    'header-four': { element: 'h4', HeaderFour },
-    'header-five': { element: 'h5', HeaderFive },
-    'header-six': { element: 'h6', HeaderSix },
+    'header-one': { element: 'h1', wrapper: HeaderOne },
+    'header-two': { element: 'h2', wrapper: HeaderTwo },
+    'header-three': { element: 'h3', wrapper: HeaderThree },
+    'header-four': { element: 'h4', wrapper: HeaderFour },
+    'header-five': { element: 'h5', wrapper: HeaderFive },
+    'header-six': { element: 'h6', wrapper: HeaderSix },
   })
 );

@@ -32,7 +32,7 @@ export function useNoteState(
     };
 
     getNote();
-  }, []);
+  }, [id]);
 
   return {
     result: [result, setResult],

@@ -3,13 +3,23 @@ import clsx from 'clsx';
 
 interface Props extends React.ComponentPropsWithoutRef<'input'> {
   variant?: 'primary' | 'secondary';
+  blurOnEnter?: boolean;
 }
 
 const TextInput = (props: Props) => {
-  const { className, type, variant = 'primary', ...otherProps } = props;
+  const {
+    className,
+    blurOnEnter,
+    type,
+    variant = 'primary',
+    onKeyDown,
+    ...otherProps
+  } = props;
+  const ref = React.useRef<HTMLInputElement>(null);
 
   return (
     <input
+      ref={ref}
       className={clsx(
         'focus:outline-none',
         variant === 'primary'
@@ -17,6 +27,10 @@ const TextInput = (props: Props) => {
           : 'p-1 border-b',
         className
       )}
+      onKeyDown={e => {
+        if (e.key === 'Enter' && blurOnEnter) ref.current?.blur();
+        onKeyDown?.(e);
+      }}
       {...otherProps}
       type='text'
     />

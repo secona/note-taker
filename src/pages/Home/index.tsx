@@ -12,6 +12,10 @@ const Home: React.FC = () => {
     error,
   } = useAllNotesState();
 
+  React.useEffect(() => {
+    document.title = 'NoteTaker';
+  }, []);
+
   const deleteNote = (id: string) => {
     localforage
       .removeItem(id)

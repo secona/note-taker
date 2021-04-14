@@ -12,23 +12,28 @@ export type Option = {
 
 interface Props {
   options: Option[];
-  selected: string;
+  value: string;
   color?: 'primary' | 'secondary';
   buttonClassName?: string;
   className?: string;
+  onChange?: (value: string) => void;
 }
 
 const Select = (props: Props) => {
   const {
-    selected,
+    value,
     options,
     color = 'primary',
     buttonClassName,
     className,
+    onChange,
   } = props;
   const node = React.useRef<HTMLDivElement>(null);
-  const [selectedOpt, setSelectedOpt] = React.useState(selected);
   const [open, setOpen] = React.useState(false);
+
+  const selectOpt = (newValue: string) => {
+    if (onChange) onChange(newValue);
+  };
 
   const handleClick = (e: MouseEvent) => {
     if (!(node.current! as any).contains(e.target)) setOpen(false);
@@ -51,21 +56,18 @@ const Select = (props: Props) => {
             : 'border border-gray-200 hover:bg-gray-50 hover:border-transparent text-black',
           buttonClassName
         )}
+        onMouseDown={e => e.preventDefault()}
         onClick={() => setOpen(!open)}
       >
         <p className='flex-grow'>
-          {options.find(o => o.value === selectedOpt)?.label}
+          {options.find(o => o.value === value)?.label}
         </p>
         {open ? <MdArrowDropUp /> : <MdArrowDropDown />}
       </button>
       {open && (
         <SelectOptionsContainer>
           {options.map(option => (
-            <SelectOption
-              option={option}
-              setSelectedOpt={setSelectedOpt}
-              close={close}
-            />
+            <SelectOption option={option} selectOpt={selectOpt} close={close} />
           ))}
         </SelectOptionsContainer>
       )}

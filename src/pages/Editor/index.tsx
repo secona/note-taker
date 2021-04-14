@@ -27,6 +27,11 @@ const NoteEditor: React.FC = () => {
     error,
   } = useNoteState(id);
 
+  React.useEffect(() => {
+    const noteTitle = state?.title || 'Untitled Note';
+    document.title = `${noteTitle} - NoteTaker`;
+  }, [state?.title]);
+
   if (error) return <p>Error!</p>;
   if (loading) return <p>Loading...</p>;
   if (!state) return <p>404 Note not found!</p>;
@@ -52,6 +57,9 @@ const NoteEditor: React.FC = () => {
           variant='secondary'
           className='w-full text-2xl font-semibold'
           placeholder='Untitled Note'
+          defaultValue={state.title}
+          onBlur={e => setState(prev => ({ ...prev!, title: e.target.value }))}
+          blurOnEnter={true}
         />
         <Editor
           placeholder="What's on your mind?"
