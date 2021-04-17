@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContentState } from 'draft-js';
 import { Link } from 'react-router-dom';
-import { INoteWithId } from '@lib/note';
+import { INoteWithId } from 'src/interfaces';
 import { MdDelete, MdMoreVert } from 'react-icons/md';
 import { Dropdown, DropdownItem } from '@components/Dropdown';
 

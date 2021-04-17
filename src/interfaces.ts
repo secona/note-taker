@@ -11,7 +11,4 @@ export interface INoteWithId<NoteType = EditorState> {
   note: NoteType;
 }
 
-export const EmptyNote: INote = {
-  title: '',
-  note: EditorState.createEmpty(),
-};
+export type Vector2 = [number, number];

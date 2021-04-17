@@ -1,7 +1,7 @@
 import { convertFromRaw, EditorState, RawDraftContentState } from 'draft-js';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import localforage from 'localforage';
-import { INote } from '../note';
+import { INote } from '../../interfaces';
 import { Response } from './index';
 
 export function useNoteState(

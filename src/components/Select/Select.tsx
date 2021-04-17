@@ -2,7 +2,8 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import SelectOption from './SelectOption';
-import SelectOptionsContainer from './SelectOptionsContainer';
+import Popup from '@components/Popup';
+import { Vector2 } from 'src/interfaces';
 
 export type Option = {
   value: string;
@@ -28,26 +29,18 @@ const Select = (props: Props) => {
     className,
     onChange,
   } = props;
-  const node = React.useRef<HTMLDivElement>(null);
+
   const [open, setOpen] = React.useState(false);
+  const [coords, setCoords] = React.useState<Vector2>([0, 0]);
 
   const selectOpt = (newValue: string) => {
     if (onChange) onChange(newValue);
   };
 
-  const handleClick = (e: MouseEvent) => {
-    if (!(node.current! as any).contains(e.target)) setOpen(false);
-  };
-
-  React.useEffect(() => {
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
   const close = () => setOpen(false);
 
   return (
-    <div className={className} ref={node}>
+    <div className={className}>
       <button
         className={clsx(
           'flex focus:outline-none items-center py-1.5 px-2.5 rounded-md',
@@ -57,7 +50,11 @@ const Select = (props: Props) => {
           buttonClassName
         )}
         onMouseDown={e => e.preventDefault()}
-        onClick={() => setOpen(!open)}
+        onClick={e => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          setCoords([rect.x, rect.y]);
+          setOpen(!open);
+        }}
       >
         <p className='flex-grow'>
           {options.find(o => o.value === value)?.label}
@@ -65,11 +62,16 @@ const Select = (props: Props) => {
         {open ? <MdArrowDropUp /> : <MdArrowDropDown />}
       </button>
       {open && (
-        <SelectOptionsContainer>
+        <Popup
+          fixed
+          coords={coords}
+          onClickOutside={() => setOpen(false)}
+          margin={10}
+        >
           {options.map(option => (
             <SelectOption option={option} selectOpt={selectOpt} close={close} />
           ))}
-        </SelectOptionsContainer>
+        </Popup>
       )}
     </div>
   );

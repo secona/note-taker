@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { RichUtils, EditorState } from 'draft-js';
 import { Redirect, useParams } from 'react-router-dom';
-import { INote } from '@lib/note';
+import { INote } from 'src/interfaces';
 import { SaveNote } from '@lib/db';
 import { IconButton } from '@components/Button';
 import {

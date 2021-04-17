@@ -6,6 +6,7 @@ module.exports = {
       '@components': resolve(__dirname, 'src/components'),
       '@lib': resolve(__dirname, 'src/lib'),
       '@pages': resolve(__dirname, 'src/pages'),
+      '@utils': resolve(__dirname, 'src/utils'),
     },
   },
   style: {

@@ -27,8 +27,8 @@ const Home: React.FC = () => {
   if (error) return <p>Error!</p>;
 
   return (
-    <div className='h-screen w-screen bg-gray-100 overflow-y-auto'>
-      <div className='container mx-auto mb-7'>
+    <div className='min-h-screen bg-gray-100 pb-8'>
+      <div className='container mx-auto'>
         <Header />
         <NoteGrid>
           {notes.map(note => (

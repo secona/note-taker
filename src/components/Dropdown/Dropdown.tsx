@@ -1,6 +1,7 @@
 import React from 'react';
-import DropdownItemContainer from './DropdownItemContainer';
 import { DropdownItemProps } from './DropdownItem';
+import Popup from '@components/Popup';
+import { Vector2 } from 'src/interfaces';
 
 interface Props {
   icon: React.ReactNode;
@@ -9,39 +10,35 @@ interface Props {
   children: React.ReactElement<DropdownItemProps>;
 }
 
-const Dropdown: React.FC<Props> = ({
-  children,
-  icon,
-  className,
-  buttonClassName,
-}) => {
-  const node = React.useRef<HTMLDivElement>(null);
+const Dropdown: React.FC<Props> = (props: Props) => {
+  const { children, icon, className, buttonClassName } = props;
+
   const [open, setOpen] = React.useState(false);
-
-  const handleClick = (e: MouseEvent) => {
-    if (!(node.current! as any).contains(e.target)) setOpen(false);
-  };
-
-  React.useEffect(() => {
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
+  const [coords, setCoords] = React.useState<Vector2>([0, 0]);
 
   return (
-    <div className={className} ref={node}>
+    <div className={className}>
       <button
         className={buttonClassName}
-        onClick={() => setOpen(!open)}
+        onClick={e => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          setCoords([rect.x, rect.y]);
+          setOpen(!open);
+        }}
         children={icon}
       />
       {open && (
-        <DropdownItemContainer>
+        <Popup
+          coords={coords}
+          onClickOutside={() => setOpen(false)}
+          margin={10}
+        >
           {React.Children.map(
             children,
             (child: React.ReactElement<DropdownItemProps>) =>
               React.cloneElement(child, { closeDropdown: () => setOpen(false) })
           )}
-        </DropdownItemContainer>
+        </Popup>
       )}
     </div>
   );

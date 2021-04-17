@@ -2,7 +2,7 @@ import { ContentState, convertFromRaw, RawDraftContentState } from 'draft-js';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import localforage from 'localforage';
 import { Response } from '.';
-import { INote, INoteWithId } from '../note';
+import { INote, INoteWithId } from '../../interfaces';
 
 export function useAllNotesState(): Response<
   [

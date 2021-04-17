@@ -1,7 +1,7 @@
 import { RawDraftContentState } from 'draft-js';
 import localforage from 'localforage';
 import { nanoid } from 'nanoid';
-import { INote } from '../note';
+import { INote } from '../../interfaces';
 
 /**
  * @returns id of the new note
