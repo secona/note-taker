@@ -1,16 +1,17 @@
 import React from 'react';
 import { ContentState } from 'draft-js';
 import { Link } from 'react-router-dom';
+import { MdMoreVert } from 'react-icons/md';
 import { INoteWithId } from 'src/interfaces';
-import { MdDelete, MdMoreVert } from 'react-icons/md';
 import { Dropdown, DropdownItem } from '@components/Dropdown';
+import { DropdownItemProps } from '@components/Dropdown/DropdownItem';
 
 interface Props {
   note: INoteWithId<ContentState>;
-  deleteNote: (id: string) => void;
+  actions: (id: string) => (() => DropdownItemProps)[];
 }
 
-const NoteCard: React.FC<Props> = ({ note, deleteNote }) => {
+const NoteCard: React.FC<Props> = ({ note, actions }) => {
   return (
     <div className='h-10 px-3 m-1 rounded-md bg-white flex items-center'>
       <div className='flex-grow truncate'>
@@ -26,12 +27,9 @@ const NoteCard: React.FC<Props> = ({ note, deleteNote }) => {
         className='h-6'
         buttonClassName='rounded-full focus:outline-none'
       >
-        <DropdownItem
-          onClick={() => deleteNote(note.id)}
-          closeOnClick={true}
-          icon={<MdDelete />}
-          children='Delete Note'
-        />
+        {actions(note.id).map(action => (
+          <DropdownItem {...action()} />
+        ))}
       </Dropdown>
     </div>
   );

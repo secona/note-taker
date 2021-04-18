@@ -5,15 +5,16 @@ export interface DropdownItemProps {
   icon: React.ReactNode;
   closeOnClick?: boolean;
   closeDropdown?: () => void;
+  children: string;
 }
 
-const DropdownItem: React.FC<DropdownItemProps> = ({
+const DropdownItem = ({
   onClick,
   icon,
   children,
   closeOnClick,
   closeDropdown,
-}) => {
+}: DropdownItemProps) => {
   return (
     <button
       className='flex w-full space-x-3 items-center cursor-pointer hover:bg-blue-50 focus:outline-none px-3 py-2 rounded-md'

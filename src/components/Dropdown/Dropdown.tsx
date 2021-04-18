@@ -7,7 +7,7 @@ interface Props {
   icon: React.ReactNode;
   className?: string;
   buttonClassName?: string;
-  children: React.ReactElement<DropdownItemProps>;
+  children: React.ReactElement<DropdownItemProps>[];
 }
 
 const Dropdown: React.FC<Props> = (props: Props) => {

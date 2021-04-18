@@ -1,9 +1,10 @@
-import React from 'react';
-import localforage from 'localforage';
+import * as React from 'react';
 import { useAllNotesState } from '@lib/db';
+import { filterNotes } from '@utils/filterNotes';
 import NoteCard from './NoteCard';
 import NoteGrid from './NoteGrid';
 import Header from './Header';
+import { noteActions } from './noteActions';
 
 const Home: React.FC = () => {
   const {
@@ -16,12 +17,11 @@ const Home: React.FC = () => {
     document.title = 'NoteTaker';
   }, []);
 
-  const deleteNote = (id: string) => {
-    localforage
-      .removeItem(id)
-      .then(() => setNotes(notes.filter(v => v.id !== id)))
-      .catch(err => console.log(err));
-  };
+  const { starred, notStarred } = React.useMemo(() => filterNotes(notes), [
+    notes,
+  ]);
+
+  const actions = (id: string) => noteActions(notes, setNotes, id);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
@@ -30,9 +30,14 @@ const Home: React.FC = () => {
     <div className='min-h-screen bg-gray-100 pb-8'>
       <div className='container mx-auto'>
         <Header />
-        <NoteGrid>
-          {notes.map(note => (
-            <NoteCard note={note} deleteNote={deleteNote} />
+        <NoteGrid title='starred notes'>
+          {starred.map(note => (
+            <NoteCard note={note} actions={actions} />
+          ))}
+        </NoteGrid>
+        <NoteGrid title='notes'>
+          {notStarred.map(note => (
+            <NoteCard note={note} actions={actions} />
           ))}
         </NoteGrid>
       </div>

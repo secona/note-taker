@@ -92,7 +92,6 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
           children={loading ? <LoadingIcon /> : <MdArrowBack size={24} />}
         />
         <Select
-          // TODO: fix select behaviour
           value={(() => {
             const currentType = RichUtils.getCurrentBlockType(state.note);
             return currentType.startsWith('header') ? currentType : 'unstyled';

@@ -3,12 +3,11 @@ import { EditorState } from 'draft-js';
 export interface INote<NoteType = EditorState> {
   title: string;
   note: NoteType;
+  starred?: boolean;
 }
 
-export interface INoteWithId<NoteType = EditorState> {
+export interface INoteWithId<NoteType = EditorState> extends INote<NoteType> {
   id: string;
-  title: string;
-  note: NoteType;
 }
 
 export type Vector2 = [number, number];
