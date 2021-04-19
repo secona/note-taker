@@ -30,6 +30,7 @@ const Dropdown: React.FC<Props> = (props: Props) => {
       {open && (
         <Popup
           coords={coords}
+          className='text-gray-700'
           onClickOutside={() => setOpen(false)}
           margin={10}
         >

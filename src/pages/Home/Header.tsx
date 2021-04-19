@@ -23,7 +23,7 @@ const Header = () => {
         }}
         disabled={loading}
       >
-        {loading ? <LoadingIcon /> : <MdAdd size={24} />}
+        {loading ? <LoadingIcon size={24} /> : <MdAdd size={24} />}
       </IconButton>
     </div>
   );

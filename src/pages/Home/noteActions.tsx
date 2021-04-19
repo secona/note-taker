@@ -28,7 +28,7 @@ export const noteActions = (
         closeOnClick: true,
         onClick: deleteNote,
         children: 'Delete note',
-        icon: <MdDelete />,
+        Icon: MdDelete,
       };
     },
     () => {
@@ -46,7 +46,7 @@ export const noteActions = (
         closeOnClick: true,
         onClick: toggleStar,
         children: isStarred ? 'Unstar note' : 'Star note',
-        icon: isStarred ? <MdStar /> : <MdStarBorder />,
+        Icon: isStarred ? MdStar : MdStarBorder,
       };
     },
   ];

@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ToolbarButton = (props: Props) => {
-  const { className, Icon, active, iconSize = 24, ...otherProps } = props;
+  const { className, Icon, active, iconSize = 16, ...otherProps } = props;
 
   return (
     <button

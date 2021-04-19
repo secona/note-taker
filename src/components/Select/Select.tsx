@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
+import { IconType } from 'react-icons/lib';
 import SelectOption from './SelectOption';
 import Popup from '@components/Popup';
 import { Vector2 } from 'src/interfaces';
@@ -8,7 +9,7 @@ import { Vector2 } from 'src/interfaces';
 export type Option = {
   value: string;
   label: string;
-  icon?: React.ReactNode;
+  Icon?: IconType;
 };
 
 interface Props {
@@ -43,7 +44,7 @@ const Select = (props: Props) => {
     <div className={className}>
       <button
         className={clsx(
-          'flex focus:outline-none items-center py-1.5 px-2.5 rounded-md',
+          'flex focus:outline-none items-center rounded-md',
           color === 'primary'
             ? 'bg-blue-500 hover:bg-blue-600 text-white'
             : 'border border-gray-200 hover:bg-gray-50 hover:border-transparent text-black',
@@ -65,11 +66,17 @@ const Select = (props: Props) => {
         <Popup
           fixed
           coords={coords}
+          className='text-gray-700'
           onClickOutside={() => setOpen(false)}
           margin={10}
         >
           {options.map(option => (
-            <SelectOption option={option} selectOpt={selectOpt} close={close} />
+            <SelectOption
+              active={value === option.value}
+              option={option}
+              selectOpt={selectOpt}
+              close={close}
+            />
           ))}
         </Popup>
       )}

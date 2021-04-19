@@ -50,7 +50,7 @@ const NoteEditor: React.FC = () => {
   };
 
   return (
-    <div className='min-h-screen bg-gray-100 pt-16 pb-5'>
+    <div className='min-h-screen bg-gray-100 pt-14 pb-5'>
       <Toolbar state={state} setState={setState} />
       <div className='bg-white container mx-auto rounded-lg px-4 py-2'>
         <TextInput

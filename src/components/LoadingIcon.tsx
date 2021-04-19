@@ -5,13 +5,13 @@ import { VscLoading } from 'react-icons/vsc';
 
 const LoadingIcon: React.FC<IconBaseProps> = ({
   className,
-  size,
+  size = 16,
   ...otherProps
 }) => {
   return (
     <VscLoading
       className={clsx('animate-spin', className)}
-      size={size || 24}
+      size={size}
       {...otherProps}
     />
   );

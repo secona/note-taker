@@ -15,10 +15,7 @@ const NoteCard: React.FC<Props> = ({ note, actions }) => {
   return (
     <div className='h-10 px-3 m-1 rounded-md bg-white flex items-center'>
       <div className='flex-grow truncate'>
-        <Link
-          className='font-semibold hover:underline align-middle'
-          to={`/${note.id}`}
-        >
+        <Link className='hover:underline align-middle' to={`/${note.id}`}>
           {note.title || 'Untitled Note'}
         </Link>
       </div>

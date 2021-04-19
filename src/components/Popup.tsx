@@ -50,7 +50,7 @@ const Popup = (props: Props) => {
     <div
       ref={onRefSet}
       className={clsx(
-        'min-w-60 rounded-md bg-white shadow-lg z-50',
+        'rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50',
         fixed ? 'fixed' : 'absolute',
         className
       )}

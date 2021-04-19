@@ -89,9 +89,10 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
             else console.log('Error!');
           }}
           disabled={loading}
-          children={loading ? <LoadingIcon /> : <MdArrowBack size={24} />}
+          children={loading ? <LoadingIcon /> : <MdArrowBack />}
         />
         <Select
+          buttonClassName='py-1 px-2.5 text-sm'
           value={(() => {
             const currentType = RichUtils.getCurrentBlockType(state.note);
             return currentType.startsWith('header') ? currentType : 'unstyled';
