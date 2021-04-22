@@ -19,6 +19,7 @@ interface Props {
   buttonClassName?: string;
   className?: string;
   onChange?: (value: string) => void;
+  dropdownFixed?: boolean;
 }
 
 const Select = (props: Props) => {
@@ -29,16 +30,25 @@ const Select = (props: Props) => {
     buttonClassName,
     className,
     onChange,
+    dropdownFixed,
   } = props;
 
   const [open, setOpen] = React.useState(false);
   const [coords, setCoords] = React.useState<Vector2>([0, 0]);
 
-  const selectOpt = (newValue: string) => {
-    if (onChange) onChange(newValue);
-  };
+  const selectOpt = React.useCallback(
+    (newValue: string) => {
+      if (onChange) onChange(newValue);
+    },
+    [onChange]
+  );
 
-  const close = () => setOpen(false);
+  const close = React.useCallback(() => setOpen(false), [setOpen]);
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = e => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords([rect.x, rect.y]);
+    setOpen(prev => !prev);
+  };
 
   return (
     <div className={className}>
@@ -51,11 +61,7 @@ const Select = (props: Props) => {
           buttonClassName
         )}
         onMouseDown={e => e.preventDefault()}
-        onClick={e => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          setCoords([rect.x, rect.y]);
-          setOpen(!open);
-        }}
+        onClick={handleClick}
       >
         <p className='flex-grow'>
           {options.find(o => o.value === value)?.label}
@@ -64,14 +70,15 @@ const Select = (props: Props) => {
       </button>
       {open && (
         <Popup
-          fixed
+          fixed={dropdownFixed}
           coords={coords}
           className='text-gray-700'
           onClickOutside={() => setOpen(false)}
           margin={10}
         >
-          {options.map(option => (
+          {options.map((option, idx) => (
             <SelectOption
+              key={idx}
               active={value === option.value}
               option={option}
               selectOpt={selectOpt}

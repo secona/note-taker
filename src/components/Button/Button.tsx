@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
+import { IconBaseProps } from 'react-icons/lib';
 
 interface Props extends React.ComponentPropsWithoutRef<'button'> {
   color: 'primary' | 'secondary';
-  icon?: React.ReactNode;
+  icon?: React.ReactElement<IconBaseProps>;
   children: string;
 }
 

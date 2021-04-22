@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   Editor,
   RichUtils,
@@ -36,15 +36,14 @@ const NoteEditor: React.FC = () => {
   if (loading) return <p>Loading...</p>;
   if (!state) return <p>404 Note not found!</p>;
 
-  const setNote = (newNote: EditorState) => {
-    setState(prev => ({ ...prev!, note: newNote }));
-  };
-
+  const setNote = (note: EditorState) => setState({ ...state, note });
   const handleKeyCommand = (command: DraftEditorCommand) => {
-    const newNote = RichUtils.handleKeyCommand(state.note, command);
-    if (newNote) {
-      setNote(newNote);
-      return 'handled';
+    if (state?.note) {
+      const newNote = RichUtils.handleKeyCommand(state.note, command);
+      if (newNote) {
+        setNote(newNote);
+        return 'handled';
+      }
     }
     return 'not-handled';
   };

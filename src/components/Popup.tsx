@@ -10,9 +10,14 @@ interface Props extends React.ComponentPropsWithoutRef<'div'> {
   fixed?: boolean;
   coords: Vector2;
   margin?: number;
+  withBackground?: boolean;
   onClickOutside?: () => void;
 }
 
+/**
+ * if `withBackground` is true, `fixed` is automatically true
+ * @reason When the user scrolls down, the popup doesn't get out of screen leaving a dark screen
+ */
 const Popup = (props: Props) => {
   const {
     style,
@@ -21,6 +26,7 @@ const Popup = (props: Props) => {
     fixed,
     margin = 0,
     onClickOutside,
+    withBackground,
     ...otherProps
   } = props;
 
@@ -46,17 +52,33 @@ const Popup = (props: Props) => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [ref, onClickOutside]);
 
+  /** Wrapper for the popup */
+  const Wrapper: React.FC = useCallback(
+    props =>
+      withBackground ? (
+        <div
+          className='fixed w-screen h-screen bg-black bg-opacity-40'
+          {...props}
+        />
+      ) : (
+        <React.Fragment {...props} />
+      ),
+    [withBackground]
+  );
+
   return createPortal(
-    <div
-      ref={onRefSet}
-      className={clsx(
-        'rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50',
-        fixed ? 'fixed' : 'absolute',
-        className
-      )}
-      style={{ ...getPopupCoords(margin, coords, dimension), ...style }}
-      {...otherProps}
-    />,
+    <Wrapper>
+      <div
+        ref={onRefSet}
+        className={clsx(
+          'rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50',
+          withBackground || fixed ? 'fixed' : 'absolute',
+          className
+        )}
+        style={{ ...getPopupCoords(margin, coords, dimension), ...style }}
+        {...otherProps}
+      />
+    </Wrapper>,
     document.getElementById('portal')!
   );
 };

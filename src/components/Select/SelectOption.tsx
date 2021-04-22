@@ -26,7 +26,9 @@ const SelectOption = (props: Props) => {
       onClick={handleClick}
       onMouseDown={e => e.preventDefault()}
     >
-      {option.Icon && <option.Icon size={24} className='fill-current' />}
+      {option.Icon && (
+        <option.Icon size={24} className='fill-current text-gray-500' />
+      )}
       <p>{option.label}</p>
     </button>
   );

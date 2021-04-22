@@ -24,7 +24,7 @@ const DropdownItem = ({
         if (closeOnClick) closeDropdown?.();
       }}
     >
-      {Icon && <Icon size={24} className='fill-current' />}
+      {Icon && <Icon size={24} className='fill-current text-gray-500' />}
       <p>{children}</p>
     </button>
   );

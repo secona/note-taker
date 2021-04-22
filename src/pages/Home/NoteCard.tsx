@@ -1,17 +1,21 @@
 import React from 'react';
-import { ContentState } from 'draft-js';
 import { Link } from 'react-router-dom';
 import { MdMoreVert } from 'react-icons/md';
 import { INoteWithId } from 'src/interfaces';
 import { Dropdown, DropdownItem } from '@components/Dropdown';
 import { DropdownItemProps } from '@components/Dropdown/DropdownItem';
 
+export type NoteCardDropdownActions = (
+  id: string,
+  isStarred: boolean | undefined
+) => DropdownItemProps[];
+
 interface Props {
-  note: INoteWithId<ContentState>;
-  actions: (id: string) => (() => DropdownItemProps)[];
+  note: INoteWithId<any>;
+  actions: NoteCardDropdownActions;
 }
 
-const NoteCard: React.FC<Props> = ({ note, actions }) => {
+const NoteCard = ({ note, actions }: Props) => {
   return (
     <div className='h-10 px-3 m-1 rounded-md bg-white flex items-center'>
       <div className='flex-grow truncate'>
@@ -22,10 +26,10 @@ const NoteCard: React.FC<Props> = ({ note, actions }) => {
       <Dropdown
         icon={<MdMoreVert size={24} />}
         className='h-6'
-        buttonClassName='rounded-full focus:outline-none'
+        buttonClassName='rounded-full focus:outline-none flex-shrink-0'
       >
-        {actions(note.id).map(action => (
-          <DropdownItem {...action()} />
+        {actions(note.id, note.starred).map((action, idx) => (
+          <DropdownItem {...action} key={idx} />
         ))}
       </Dropdown>
     </div>

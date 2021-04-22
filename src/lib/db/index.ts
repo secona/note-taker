@@ -7,4 +7,4 @@ export interface Response<ResultType> {
 export * from './useNoteState';
 export * from './useAllNotesState';
 export * from './createNewNote';
-export * from './saveNote';
+export * from './updateNote';

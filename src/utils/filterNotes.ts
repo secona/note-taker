@@ -1,7 +1,6 @@
-import { ContentState } from "draft-js";
 import { INoteWithId } from "src/interfaces";
 
-type Notes = INoteWithId<ContentState>[];
+type Notes = INoteWithId<any>[];
 
 export interface FilteredNotes {
   starred: Notes;

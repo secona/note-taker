@@ -1,9 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { RichUtils, EditorState } from 'draft-js';
 import { Redirect, useParams } from 'react-router-dom';
-import { INote } from 'src/interfaces';
-import { SaveNote } from '@lib/db';
+import { IconType } from 'react-icons/lib';
+
 import { IconButton } from '@components/Button';
+import ToolbarButton from './ToolbarButton';
+import Select from '@components/Select/Select';
+import LoadingIcon from '@components/LoadingIcon';
+
+import { INote } from 'src/interfaces';
+import { updateNote } from '@lib/db';
+import { fullConvertToRaw } from '@utils/fullConvertToRaw';
+
 import {
   MdArrowBack,
   MdFormatBold,
@@ -16,10 +24,6 @@ import {
   MdStrikethroughS,
   MdUndo,
 } from 'react-icons/md';
-import LoadingIcon from '@components/LoadingIcon';
-import { IconType } from 'react-icons/lib';
-import ToolbarButton from './ToolbarButton';
-import Select from '@components/Select/Select';
 
 type Button = {
   type: 'inline' | 'block' | 'other';
@@ -32,28 +36,24 @@ interface Props {
   state: INote;
 }
 
+const buttons: Button[] = [
+  { type: 'inline', value: 'BOLD', icon: MdFormatBold },
+  { type: 'inline', value: 'ITALIC', icon: MdFormatItalic },
+  { type: 'inline', value: 'UNDERLINE', icon: MdFormatUnderlined },
+  { type: 'inline', value: 'STRIKETHROUGH', icon: MdStrikethroughS },
+  { type: 'inline', value: 'HIGHLIGHT', icon: MdFormatColorFill },
+  { type: 'block', value: 'ordered-list-item', icon: MdFormatListNumbered },
+  { type: 'block', value: 'unordered-list-item', icon: MdFormatListBullet },
+  { type: 'other', value: 'undo', icon: MdUndo },
+  { type: 'other', value: 'redo', icon: MdRedo },
+];
+
 const Toolbar: React.FC<Props> = ({ state, setState }) => {
   const { id } = useParams<{ id: string }>();
   const [redirect, setRedirect] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const buttons = useMemo<Button[]>(
-    () => [
-      { type: 'inline', value: 'BOLD', icon: MdFormatBold },
-      { type: 'inline', value: 'ITALIC', icon: MdFormatItalic },
-      { type: 'inline', value: 'UNDERLINE', icon: MdFormatUnderlined },
-      { type: 'inline', value: 'STRIKETHROUGH', icon: MdStrikethroughS },
-      { type: 'inline', value: 'HIGHLIGHT', icon: MdFormatColorFill },
-      { type: 'block', value: 'ordered-list-item', icon: MdFormatListNumbered },
-      { type: 'block', value: 'unordered-list-item', icon: MdFormatListBullet },
-      { type: 'other', value: 'undo', icon: MdUndo },
-      { type: 'other', value: 'redo', icon: MdRedo },
-    ],
-    []
-  );
-
   if (redirect) return <Redirect to={redirect} />;
-
   const setNote = (n: EditorState) => setState(prev => ({ ...prev!, note: n }));
 
   const action: any = {
@@ -77,21 +77,25 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
     other: () => false,
   };
 
+  const handleBackButtonClick = () => {
+    setLoading(true);
+    const note = fullConvertToRaw(state.note);
+    updateNote(id, { ...state, note })
+      .then(() => setRedirect('/'))
+      .catch(() => alert('An error occured. Please try again!'));
+  };
+
   return (
     <div className='fixed w-full top-2 z-10'>
       <div className='container mx-auto shadow-lg rounded-lg bg-blue-500 flex items-center space-x-0.5 p-1'>
         <IconButton
           color='primary'
-          onClick={async () => {
-            setLoading(true);
-            const result = await SaveNote(id, state);
-            if (result === 'success') setRedirect('/');
-            else console.log('Error!');
-          }}
+          onClick={handleBackButtonClick}
           disabled={loading}
           children={loading ? <LoadingIcon /> : <MdArrowBack />}
         />
         <Select
+          dropdownFixed
           buttonClassName='py-1 px-2.5 text-sm'
           value={(() => {
             const currentType = RichUtils.getCurrentBlockType(state.note);
@@ -108,8 +112,9 @@ const Toolbar: React.FC<Props> = ({ state, setState }) => {
           ]}
           onChange={value => action.block(value)}
         />
-        {buttons.map(({ type, value, icon }) => (
+        {buttons.map(({ type, value, icon }, idx) => (
           <ToolbarButton
+            key={idx}
             active={isStyleActive[type](value)}
             onClick={() => {
               if (type === 'other') action[type][value]();

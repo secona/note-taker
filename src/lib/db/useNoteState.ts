@@ -15,15 +15,14 @@ export function useNoteState(
     setLoading(true);
     const getNote = async () => {
       try {
-        const rawNote = await localforage.getItem<INote<RawDraftContentState>>(
+        const response = await localforage.getItem<INote<RawDraftContentState>>(
           id
         );
-        if (rawNote) {
-          const { title } = rawNote;
+        if (response) {
           const note = EditorState.createWithContent(
-            convertFromRaw(rawNote.note)
+            convertFromRaw(response.note)
           );
-          setResult({ title, note });
+          setResult({ ...response, note });
         }
         setLoading(false);
       } catch (err) {
