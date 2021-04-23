@@ -5,13 +5,19 @@ import { IconType } from 'react-icons/lib';
 interface Props {
   className?: string;
   iconSize?: number;
-  active: boolean;
+  active?: boolean;
   Icon: IconType;
   onClick: () => void;
 }
 
 const ToolbarButton = (props: Props) => {
-  const { className, Icon, active, iconSize = 16, ...otherProps } = props;
+  const {
+    className,
+    Icon,
+    active = false,
+    iconSize = 16,
+    ...otherProps
+  } = props;
 
   return (
     <button
