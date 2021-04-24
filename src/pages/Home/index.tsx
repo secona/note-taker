@@ -5,6 +5,7 @@ import { Prompt, Redirect } from 'react-router';
 import { MdDelete, MdEdit, MdStar, MdStarBorder } from 'react-icons/md';
 import { filterNotes } from '@utils/filterNotes';
 import NoteCard, { NoteCardDropdownActions } from './NoteCard';
+import { Loading, Error } from '@components/Screens';
 import NoteGrid from './NoteGrid';
 import Header from './Header';
 import { INoteWithId } from 'src/interfaces';
@@ -75,8 +76,8 @@ const Home: React.FC = () => {
   ];
 
   if (redirect) return <Redirect to={redirect} />;
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error!</p>;
+  if (loading) return <Loading />;
+  if (error) return <Error />;
 
   return (
     <>
@@ -84,20 +85,18 @@ const Home: React.FC = () => {
         when={isSaving}
         message='Are you sure you want to exit? All unsaved changes will be lost!'
       />
-      <div className='min-h-screen bg-gray-100 pb-8'>
-        <div className='container mx-auto'>
-          <Header />
-          <NoteGrid title='starred notes'>
-            {starred.map(note => (
-              <NoteCard key={note.id} note={note} actions={dropdownActions} />
-            ))}
-          </NoteGrid>
-          <NoteGrid title='notes'>
-            {notStarred.map(note => (
-              <NoteCard key={note.id} note={note} actions={dropdownActions} />
-            ))}
-          </NoteGrid>
-        </div>
+      <div className='container mx-auto mb-8'>
+        <Header />
+        <NoteGrid title='starred notes'>
+          {starred.map(note => (
+            <NoteCard key={note.id} note={note} actions={dropdownActions} />
+          ))}
+        </NoteGrid>
+        <NoteGrid title='notes'>
+          {notStarred.map(note => (
+            <NoteCard key={note.id} note={note} actions={dropdownActions} />
+          ))}
+        </NoteGrid>
       </div>
     </>
   );
