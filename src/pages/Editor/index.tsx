@@ -11,7 +11,6 @@ import { useNoteState } from '@lib/db';
 import TextInput from '@components/TextInput';
 import Toolbar from './Toolbar';
 import * as Sc from '@components/Screens';
-import { blockRenderMap } from './blockRenderMap';
 import './Editor.css';
 import 'draft-js/dist/Draft.css';
 
@@ -86,7 +85,6 @@ const NoteEditor: React.FC = () => {
           editorState={state.note}
           onChange={setNote}
           handleKeyCommand={handleKeyCommand}
-          blockRenderMap={blockRenderMap}
         />
       </div>
     </>
