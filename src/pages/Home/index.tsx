@@ -85,7 +85,7 @@ const Home: React.FC = () => {
         when={isSaving}
         message='Are you sure you want to exit? All unsaved changes will be lost!'
       />
-      <div className='container mx-auto mb-8'>
+      <div className='container mx-auto mb-8 px-3.5'>
         <Header />
         <NoteGrid title='starred notes'>
           {starred.map(note => (

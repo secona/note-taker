@@ -67,25 +67,27 @@ const NoteEditor: React.FC = () => {
         message='You have unsaved changes. Are you sure you want to exit?'
       />
       <Toolbar {...{ state, setState, setHasChanged }} />
-      <div className='bg-white container mx-auto rounded-lg px-4 py-2 mt-14 mb-8'>
-        <TextInput
-          blurOnEnter
-          variant='secondary'
-          className='w-full text-2xl font-semibold'
-          placeholder='Untitled Note'
-          defaultValue={state.title}
-          onBlur={e => {
-            setHasChanged(true);
-            setState({ ...state, title: e.target.value });
-          }}
-        />
-        <Editor
-          placeholder="What's on your mind?"
-          customStyleMap={styleMap}
-          editorState={state.note}
-          onChange={setNote}
-          handleKeyCommand={handleKeyCommand}
-        />
+      <div className='mt-14 mb-8 container mx-auto px-3.5'>
+        <div className='bg-white rounded-lg px-4 py-2'>
+          <TextInput
+            blurOnEnter
+            variant='secondary'
+            className='w-full text-2xl font-semibold'
+            placeholder='Untitled Note'
+            defaultValue={state.title}
+            onBlur={e => {
+              setHasChanged(true);
+              setState({ ...state, title: e.target.value });
+            }}
+          />
+          <Editor
+            placeholder="What's on your mind?"
+            customStyleMap={styleMap}
+            editorState={state.note}
+            onChange={setNote}
+            handleKeyCommand={handleKeyCommand}
+          />
+        </div>
       </div>
     </>
   );

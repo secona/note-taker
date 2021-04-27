@@ -125,8 +125,8 @@ const Toolbar: React.FC<Props> = ({ state, setState, setHasChanged }) => {
 
   return (
     <>
-      <div className='fixed w-full top-2 z-10'>
-        <div className='container mx-auto shadow-lg rounded-lg bg-blue-500 flex items-center space-x-0.5 p-1'>
+      <div className='fixed w-full top-0 z-10'>
+        <div className='shadow-lg bg-blue-500 flex items-center overflow-x-auto space-x-0.5 p-1'>
           {buttons.save(MdArrowBack, () => setRedirect('/'))}
           {buttons.save(MdSave)}
           <Select
