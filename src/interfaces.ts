@@ -1,13 +1,18 @@
-import { EditorState } from 'draft-js';
+import { RawDraftContentState } from 'draft-js';
+import { Dispatch, SetStateAction } from 'react';
 
-export interface INote<NoteType = EditorState> {
+/** contains note informations */
+export interface NoteInfo {
+  id?: string;
   title: string;
-  note: NoteType;
   starred?: boolean;
 }
 
-export interface INoteWithId<NoteType = EditorState> extends INote<NoteType> {
-  id: string;
+/** note type in database */
+export interface NoteInDB extends NoteInfo {
+  note: RawDraftContentState;
 }
+
+export type ReactSetState<T> = Dispatch<SetStateAction<T>>;
 
 export type Vector2 = [number, number];

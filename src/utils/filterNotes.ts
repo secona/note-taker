@@ -1,6 +1,6 @@
-import { INoteWithId } from "src/interfaces";
+import { NoteInDB } from 'src/interfaces';
 
-type Notes = INoteWithId<any>[];
+type Notes = NoteInDB[];
 
 export interface FilteredNotes {
   starred: Notes;
@@ -17,9 +17,7 @@ export function filterNotes(notes: Notes): FilteredNotes {
   let notStarred: Notes = [];
 
   notes.forEach(n => {
-    n.starred
-      ? starred.push(n)
-      : notStarred.push(n);
+    n.starred ? starred.push(n) : notStarred.push(n);
   });
 
   return { starred, notStarred };

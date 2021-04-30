@@ -1,10 +1,6 @@
-import { RawDraftContentState } from 'draft-js';
 import localforage from 'localforage';
-import { INote } from '../../interfaces';
+import { NoteInDB } from '../../interfaces';
 
-export async function updateNote(
-  id: string,
-  note: INote<RawDraftContentState>
-) {
-  return localforage.setItem<INote<RawDraftContentState>>(id, note);
+export async function updateNote(id: string, note: NoteInDB) {
+  return localforage.setItem<NoteInDB>(id, note);
 }

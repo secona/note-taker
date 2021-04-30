@@ -1,20 +1,20 @@
 import * as React from 'react';
 import localforage from 'localforage';
-import { updateNote, useAllNotesState } from '@lib/db';
 import { Prompt, Redirect } from 'react-router';
 import { MdDelete, MdEdit, MdStar, MdStarBorder } from 'react-icons/md';
+import { updateNote, useAllNotesState } from '@lib/db';
 import { filterNotes } from '@utils/filterNotes';
 import NoteCard, { NoteCardDropdownActions } from './NoteCard';
 import { Loading, Error } from '@components/Screens';
 import NoteGrid from './NoteGrid';
 import Header from './Header';
-import { INoteWithId } from 'src/interfaces';
+import { NoteInDB } from 'src/interfaces';
 
 const { useEffect, useMemo, useState } = React;
 
 const Home: React.FC = () => {
   const {
-    result: [notes, setNotes],
+    value: [notes, setNotes],
     loading,
     error,
   } = useAllNotesState();
@@ -48,7 +48,7 @@ const Home: React.FC = () => {
         updateNote(id, newNote)
           .then(() => {
             setNotes(
-              Object.values<INoteWithId<any>>({ ...notes, [idx]: newNote })
+              Object.values<NoteInDB>({ ...notes, [idx]: newNote })
             );
           })
           .catch(() => {

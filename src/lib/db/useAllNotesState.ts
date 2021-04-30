@@ -1,39 +1,32 @@
-import { RawDraftContentState } from 'draft-js';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import localforage from 'localforage';
-import { Response } from '.';
-import { INote, INoteWithId } from '../../interfaces';
+import { DBHookReturnType } from './index';
+import { NoteInDB, ReactSetState } from '../../interfaces';
 
-export function useAllNotesState(): Response<
-  [
-    INoteWithId<RawDraftContentState>[],
-    Dispatch<SetStateAction<INoteWithId<RawDraftContentState>[]>>
-  ]
-> {
-  const [result, setResult] = useState<INoteWithId<RawDraftContentState>[]>([]);
+type Result = [NoteInDB[], ReactSetState<NoteInDB[]>];
+
+export function useAllNotesState(): DBHookReturnType<Result> {
+  const [response, setResponse] = useState<NoteInDB[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     setLoading(true);
-    const getNotes = async () => {
+    (async () => {
       try {
         const ids = await localforage.keys();
-        let notes: INoteWithId<RawDraftContentState>[] = [];
+        let notes: NoteInDB[] = [];
         for (const id of ids) {
-          const note = await localforage.getItem<INote<RawDraftContentState>>(
-            id
-          );
+          const note = await localforage.getItem<NoteInDB>(id);
           if (note) notes.push({ id, ...note });
         }
-        setResult(notes);
+        setResponse(notes);
         setLoading(false);
       } catch (err) {
         setError(err);
       }
-    };
-    getNotes();
+    })();
   }, []);
 
-  return { result: [result, setResult], loading, error };
+  return { value: [response, setResponse], loading, error };
 }

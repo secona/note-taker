@@ -1,14 +1,11 @@
-import { RawDraftContentState } from 'draft-js';
 import localforage from 'localforage';
 import { nanoid } from 'nanoid';
-import { INote } from '../../interfaces';
+import { NoteInDB } from '../../interfaces';
 
-/**
- * @returns id of the new note
- */
+/** @returns id of the new note */
 export async function newNote(): Promise<String> {
   const id = nanoid();
-  await localforage.setItem<INote<RawDraftContentState>>(id, {
+  await localforage.setItem<NoteInDB>(id, {
     title: '',
     note: { blocks: [], entityMap: {} },
   });

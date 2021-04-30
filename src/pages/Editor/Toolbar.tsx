@@ -8,8 +8,8 @@ import ToolbarButton from './ToolbarButton';
 import Select from '@components/Select/Select';
 import LoadingIcon from '@components/LoadingIcon';
 
-import { INote } from 'src/interfaces';
-import { updateNote } from '@lib/db';
+import { ReactSetState } from 'src/interfaces';
+import { NoteStateType, updateNote } from '@lib/db';
 import { fullConvertToRaw } from '@utils/fullConvertToRaw';
 
 import {
@@ -32,9 +32,8 @@ type Button =
   | ['other', () => void, IconType];
 
 interface Props {
-  setHasChanged: React.Dispatch<React.SetStateAction<boolean>>;
-  setState: React.Dispatch<React.SetStateAction<INote | null>>;
-  state: INote;
+  setHasChanged: ReactSetState<boolean>;
+  value: NoteStateType;
 }
 
 const selectOptions = [
@@ -47,95 +46,113 @@ const selectOptions = [
   { value: 'unstyled', label: 'Paragraph' },
 ];
 
-const Toolbar: React.FC<Props> = ({ state, setState, setHasChanged }) => {
+const Toolbar: React.FC<Props> = ({
+  value: {
+    info: [noteInfo],
+    note: [note, setNote],
+  },
+  setHasChanged,
+}) => {
   const { id } = useParams<{ id: string }>();
   const [redirect, setRedirect] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const setNote = (n: EditorState) => setState(prev => ({ ...prev!, note: n }));
+  const noteFns = React.useMemo(
+    () => ({
+      toggleInline: (s: string) =>
+        setNote(RichUtils.toggleInlineStyle(note!, s)),
+      toggleBlock: (t: string) => setNote(RichUtils.toggleBlockType(note!, t)),
+      undo: () => setNote(EditorState.undo(note!)),
+      redo: () => setNote(EditorState.redo(note!)),
+    }),
+    [note, setNote]
+  );
 
-  const toggleInline = (s: string) =>
-    setNote(RichUtils.toggleInlineStyle(state.note, s));
-  const toggleBlock = (t: string) =>
-    setNote(RichUtils.toggleBlockType(state.note, t));
-  const undo = () => setNote(EditorState.undo(state.note));
-  const redo = () => setNote(EditorState.redo(state.note));
+  const toolbarButtons: Button[] = React.useMemo(
+    // TODO: can render custom button for dropdowns
+    () => [
+      ['inline', 'BOLD', MdFormatBold],
+      ['inline', 'ITALIC', MdFormatItalic],
+      ['inline', 'UNDERLINE', MdFormatUnderlined],
+      ['inline', 'STRIKETHROUGH', MdStrikethroughS],
+      ['inline', 'HIGHLIGHT', MdFormatColorFill],
+      ['block', 'blockquote', MdFormatQuote],
+      ['block', 'ordered-list-item', MdFormatListNumbered],
+      ['block', 'unordered-list-item', MdFormatListBulleted],
+      ['other', noteFns.undo, MdUndo],
+      ['other', noteFns.redo, MdRedo],
+    ],
+    [noteFns]
+  );
 
-  const toolbarButtons: Button[] = [
-    ['inline', 'BOLD', MdFormatBold],
-    ['inline', 'ITALIC', MdFormatItalic],
-    ['inline', 'UNDERLINE', MdFormatUnderlined],
-    ['inline', 'STRIKETHROUGH', MdStrikethroughS],
-    ['inline', 'HIGHLIGHT', MdFormatColorFill],
-    ['block', 'blockquote', MdFormatQuote],
-    ['block', 'ordered-list-item', MdFormatListNumbered],
-    ['block', 'unordered-list-item', MdFormatListBulleted],
-    ['other', undo, MdUndo],
-    ['other', redo, MdRedo],
-  ];
+  const isStyleActive = React.useMemo(
+    () => ({
+      inline: (s: string) => note!.getCurrentInlineStyle().has(s),
+      block: (t: string) => RichUtils.getCurrentBlockType(note!) === t,
+    }),
+    [note]
+  );
+
+  const buttons = React.useMemo(
+    () => ({
+      /** Toolbar button for toggling inline style */
+      inline: (s: string, Icon: IconType) => (
+        <ToolbarButton
+          onClick={() => noteFns.toggleInline(s)}
+          active={isStyleActive.inline(s)}
+          Icon={Icon}
+        />
+      ),
+      /** Toolbar button for toggling block types */
+      block: (t: string, Icon: IconType) => (
+        <ToolbarButton
+          onClick={() => noteFns.toggleBlock(t)}
+          active={isStyleActive.block(t)}
+          Icon={Icon}
+        />
+      ),
+      /** Toolbar button for anything other than toggling styles  */
+      other: (onClick: () => void, Icon: IconType) => (
+        <ToolbarButton onClick={onClick} Icon={Icon} />
+      ),
+    }),
+    [noteFns, isStyleActive]
+  );
 
   if (redirect) return <Redirect to={redirect} />;
 
-  const isStyleActive = {
-    inline: (s: string) => state.note.getCurrentInlineStyle().has(s),
-    block: (t: string) => RichUtils.getCurrentBlockType(state.note) === t,
-  };
-
-  const buttons = {
-    /** Toolbar button for toggling inline style */
-    inline: (s: string, Icon: IconType) => (
-      <ToolbarButton
-        onClick={() => toggleInline(s)}
-        active={isStyleActive.inline(s)}
-        Icon={Icon}
-      />
-    ),
-    /** Toolbar button for toggling block types */
-    block: (t: string, Icon: IconType) => (
-      <ToolbarButton
-        onClick={() => toggleBlock(t)}
-        active={isStyleActive.block(t)}
-        Icon={Icon}
-      />
-    ),
-    /** Toolbar button for anything  */
-    other: (onClick: () => void, Icon: IconType) => (
-      <ToolbarButton onClick={onClick} Icon={Icon} />
-    ),
-    /** Toolbar button for saving notes */
-    save: (Icon: IconType, cb?: () => void) => (
-      <IconButton
-        color='primary'
-        onClick={() => {
-          setLoading(true);
-          const note = fullConvertToRaw(state.note);
-          updateNote(id, { ...state, note })
-            .then(() => {
-              setHasChanged(false);
-              cb?.();
-            })
-            .catch(() => alert('An error occured. Please try again!'));
-          setLoading(false);
-        }}
-        disabled={loading}
-        children={loading ? <LoadingIcon /> : <Icon />}
-      />
-    ),
-  };
+  const saveButton = (Icon: IconType, cb?: () => void) => (
+    <IconButton
+      color='primary'
+      onClick={() => {
+        setLoading(true);
+        const convertedNote = fullConvertToRaw(note!);
+        updateNote(id, { ...noteInfo!, note: convertedNote })
+          .then(() => {
+            setHasChanged(false);
+            cb?.();
+          })
+          .catch(() => alert('An error occured. Please try again!'));
+        setLoading(false);
+      }}
+      disabled={loading}
+      children={loading ? <LoadingIcon /> : <Icon />}
+    />
+  );
 
   return (
     <>
       <div className='fixed w-full top-0 z-10'>
         <div className='shadow-lg bg-blue-500 flex items-center overflow-x-auto space-x-0.5 p-1'>
-          {buttons.save(MdArrowBack, () => setRedirect('/'))}
-          {buttons.save(MdSave)}
+          {saveButton(MdArrowBack, () => setRedirect('/'))}
+          {saveButton(MdSave)}
           <Select
             dropdownFixed
             buttonClassName='py-1 px-2.5 text-sm'
             options={selectOptions}
-            onChange={value => toggleBlock(value)}
+            onChange={value => noteFns.toggleBlock(value)}
             value={(() => {
-              const currentType = RichUtils.getCurrentBlockType(state.note);
+              const currentType = RichUtils.getCurrentBlockType(note!);
               return currentType.startsWith('header')
                 ? currentType
                 : 'unstyled';

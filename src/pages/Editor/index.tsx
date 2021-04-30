@@ -22,36 +22,36 @@ const styleMap: DraftStyleMap = {
 const NoteEditor: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [hasChanged, setHasChanged] = React.useState(false);
+  const { value, loading, error } = useNoteState(id);
   const {
-    result: [state, setState],
-    loading,
-    error,
-  } = useNoteState(id);
+    info: [noteInfo, setNoteInfo],
+    note: [note, setNote],
+  } = value;
 
   React.useEffect(() => {
-    const noteTitle = state?.title || 'Untitled Note';
+    const noteTitle = noteInfo?.title || 'Untitled Note';
     const star = hasChanged ? '*' : '';
     document.title = `${star}${noteTitle} - NoteTaker`;
-  }, [state?.title, hasChanged]);
+  }, [noteInfo?.title, hasChanged]);
 
   if (error) return <Sc.Error />;
   if (loading) return <Sc.Loading />;
-  if (!state) return <Sc.NotFound />;
+  if (!note) return <Sc.NotFound />;
 
-  const setNote = (note: EditorState) => {
-    const currentContentState = state.note.getCurrentContent();
+  const compareAndSetNote = (newNote: EditorState) => {
+    const currentContentState = note.getCurrentContent();
     const newContentState = note.getCurrentContent();
 
     if (newContentState !== currentContentState) {
       setHasChanged(true);
     }
 
-    setState({ ...state, note });
+    setNote(newNote);
   };
 
   const handleKeyCommand = (command: DraftEditorCommand) => {
-    if (state?.note) {
-      const newNote = RichUtils.handleKeyCommand(state.note, command);
+    if (note) {
+      const newNote = RichUtils.handleKeyCommand(note, command);
       if (newNote) {
         setNote(newNote);
         return 'handled';
@@ -66,7 +66,7 @@ const NoteEditor: React.FC = () => {
         when={hasChanged}
         message='You have unsaved changes. Are you sure you want to exit?'
       />
-      <Toolbar {...{ state, setState, setHasChanged }} />
+      <Toolbar value={value} setHasChanged={setHasChanged} />
       <div className='mt-14 mb-8 container mx-auto px-3.5'>
         <div className='bg-white rounded-lg px-4 py-2'>
           <TextInput
@@ -74,17 +74,19 @@ const NoteEditor: React.FC = () => {
             variant='secondary'
             className='w-full text-2xl font-semibold'
             placeholder='Untitled Note'
-            defaultValue={state.title}
+            defaultValue={noteInfo?.title}
             onBlur={e => {
-              setHasChanged(true);
-              setState({ ...state, title: e.target.value });
+              if (e.target.value !== noteInfo?.title) {
+                setHasChanged(true);
+                setNoteInfo({ ...noteInfo, title: e.target.value });
+              }
             }}
           />
           <Editor
             placeholder="What's on your mind?"
             customStyleMap={styleMap}
-            editorState={state.note}
-            onChange={setNote}
+            editorState={note}
+            onChange={compareAndSetNote}
             handleKeyCommand={handleKeyCommand}
           />
         </div>

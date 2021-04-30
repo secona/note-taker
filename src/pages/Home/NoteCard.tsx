@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdMoreVert } from 'react-icons/md';
-import { INoteWithId } from 'src/interfaces';
+import { NoteInDB } from 'src/interfaces';
 import { Dropdown, DropdownItem } from '@components/Dropdown';
 import { DropdownItemProps } from '@components/Dropdown/DropdownItem';
 
@@ -11,7 +11,7 @@ export type NoteCardDropdownActions = (
 ) => DropdownItemProps[];
 
 interface Props {
-  note: INoteWithId<any>;
+  note: NoteInDB;
   actions: NoteCardDropdownActions;
 }
 
@@ -28,7 +28,7 @@ const NoteCard = ({ note, actions }: Props) => {
         className='h-6'
         buttonClassName='rounded-full focus:outline-none flex-shrink-0'
       >
-        {actions(note.id, note.starred).map((action, idx) => (
+        {actions(note.id!, note.starred).map((action, idx) => (
           <DropdownItem {...action} key={idx} />
         ))}
       </Dropdown>
