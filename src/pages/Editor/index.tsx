@@ -34,13 +34,27 @@ const NoteEditor: React.FC = () => {
     document.title = `${star}${noteTitle} - NoteTaker`;
   }, [noteInfo?.title, hasChanged]);
 
+  const handleKeyCommand = React.useCallback(
+    (command: DraftEditorCommand) => {
+      if (note) {
+        const newNote = RichUtils.handleKeyCommand(note, command);
+        if (newNote) {
+          setNote(newNote);
+          return 'handled';
+        }
+      }
+      return 'not-handled';
+    },
+    [note, setNote]
+  );
+
   if (error) return <Sc.Error />;
   if (loading) return <Sc.Loading />;
-  if (!note) return <Sc.NotFound />;
+  if (!note && !noteInfo) return <Sc.NotFound />;
 
   const compareAndSetNote = (newNote: EditorState) => {
-    const currentContentState = note.getCurrentContent();
-    const newContentState = note.getCurrentContent();
+    const currentContentState = note?.getCurrentContent();
+    const newContentState = newNote.getCurrentContent();
 
     if (newContentState !== currentContentState) {
       setHasChanged(true);
@@ -49,24 +63,17 @@ const NoteEditor: React.FC = () => {
     setNote(newNote);
   };
 
-  const handleKeyCommand = (command: DraftEditorCommand) => {
-    if (note) {
-      const newNote = RichUtils.handleKeyCommand(note, command);
-      if (newNote) {
-        setNote(newNote);
-        return 'handled';
-      }
-    }
-    return 'not-handled';
-  };
-
   return (
     <>
       <Prompt
         when={hasChanged}
         message='You have unsaved changes. Are you sure you want to exit?'
       />
-      <Toolbar value={value} setHasChanged={setHasChanged} />
+      <Toolbar
+        // @ts-ignore
+        value={value}
+        setHasChanged={setHasChanged}
+      />
       <div className='mt-14 mb-8 container mx-auto px-3.5'>
         <div className='bg-white rounded-lg px-4 py-2'>
           <TextInput
@@ -85,7 +92,7 @@ const NoteEditor: React.FC = () => {
           <Editor
             placeholder="What's on your mind?"
             customStyleMap={styleMap}
-            editorState={note}
+            editorState={note!} // already checked it in line 50
             onChange={compareAndSetNote}
             handleKeyCommand={handleKeyCommand}
           />

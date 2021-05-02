@@ -10,6 +10,11 @@ export type NoteStateType = {
   note: [EditorState | undefined, ReactSetState<EditorState | undefined>];
 };
 
+export type NoteStateTypeNotNull = {
+  info: [NoteInfo, ReactSetState<NoteInfo>];
+  note: [EditorState, ReactSetState<EditorState>];
+};
+
 export function useNoteState(id: string): DBHookReturnType<NoteStateType> {
   const [noteInfo, setNoteInfo] = useState<NoteInfo>();
   const [noteValue, setNoteValue] = useState<EditorState>();
