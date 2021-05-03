@@ -29,15 +29,15 @@ const Toolbar: React.FC<Props> = ({
 
   if (redirect) return <Redirect to={redirect} />;
 
-  const saveNote = (cb?: () => void) => {
+  const saveNote = async (cb?: () => void) => {
     setLoading(true);
-    const convertedNote = fullConvertToRaw(note);
-    updateNote(id, { ...noteInfo, note: convertedNote })
-      .then(() => {
-        setHasChanged(false);
-        cb?.();
-      })
-      .catch(() => alert('An error occured. Please try again!'));
+    try {
+      await updateNote(id, { ...noteInfo, note: fullConvertToRaw(note) });
+      setHasChanged(false);
+      cb?.();
+    } catch {
+      alert('An error occured. Please try again!');
+    }
     setLoading(false);
   };
 
